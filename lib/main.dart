@@ -3,8 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:meronpan/domain/entities/chapter_hive.dart';
-import 'package:meronpan/domain/entities/manga_hive.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
 import 'package:meronpan/ui/app.dart';
 import 'package:window_manager/window_manager.dart';
@@ -36,11 +34,7 @@ void main() async {
 
   await Hive.initFlutter(dir.path);
 
-  Hive.registerAdapter(MangaHiveAdapter());
-  Hive.registerAdapter(ChapterHiveAdapter());
 
-  await Hive.openBox<MangaHive>('favorites');
-  await Hive.openBox<ChapterHive>('chapters');
   await Hive.openBox<String>('settings');
 
   if (Platform.isWindows) {

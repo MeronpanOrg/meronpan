@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart' show useState;
-import 'package:meronpan/domain/entities/manga_page.dart';
-import 'package:meronpan/ui/providers/manga/manga_page/manga_favorites_provider.dart';
-import 'package:meronpan/ui/providers/manga/manga_page/manga_page_provider.dart';
-import 'package:meronpan/ui/providers/manga/selected_manga_provider.dart';
-import 'package:meronpan/ui/views/manga/shimmer_manga_view.dart';
+import 'package:meronpan/domain/sources/models/manga.dart';
 import 'package:meronpan/ui/views/manga/widgets/header.dart';
 
 class MangaView extends ConsumerWidget {
@@ -13,37 +9,36 @@ class MangaView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final mangaCard = ref.watch(selectedMangaProvider);
-    final mangaPage = ref.watch(mangaPageProvider);
+    return Container();
 
-    return mangaPage.when(initial: () {
-      Future.microtask(
-          () => ref.read(mangaPageProvider.notifier).getMangaPage(mangaCard));
-      return const ShimmerMangaView();
-    }, loading: () {
-      return const ShimmerMangaView();
-    }, data: (manga, chapters) {
-      final tiles = chapters.chapters.keys
-          .map(
-            (e) => ListTile(
-              title: Text(e),
-            ),
-          )
-          .toList();
+    // return mangaPage.when(initial: () {
+    //   Future.microtask(
+    //       () => ref.read(mangaPageProvider.notifier).getMangaPage(mangaCard));
+    //   return const ShimmerMangaView();
+    // }, loading: () {
+    //   return const ShimmerMangaView();
+    // }, data: (manga, chapters) {
+    //   final tiles = chapters.chapters.keys
+    //       .map(
+    //         (e) => ListTile(
+    //           title: Text(e),
+    //         ),
+    //       )
+    //       .toList();
 
-      return _MangaBody(
-        mangaPage: manga,
-        chaptersSliver: SliverList(delegate: SliverChildListDelegate(tiles)),
-      );
-    }, error: (err) {
-      return _buildMangaError();
-    });
+    //   return _MangaBody(
+    //     mangaDetails: manga,
+    //     chaptersSliver: SliverList(delegate: SliverChildListDelegate(tiles)),
+    //   );
+    // }, error: (err) {
+    //   return _buildMangaError();
+    // });
   }
 
   Center buildChaptersError() =>
       const Center(child: Text('Error al cargar capitulos'));
 
-  Scaffold _buildMangaError() {
+  Scaffold buildMangaError() {
     return Scaffold(
       appBar: AppBar(),
       body: const Center(child: Text('Error')),
@@ -51,24 +46,18 @@ class MangaView extends ConsumerWidget {
   }
 }
 
-class _MangaBody extends HookConsumerWidget {
-  final MangaPage mangaPage;
+class MangaBody extends HookConsumerWidget {
+  final Manga mangaDetails;
   final Widget? chaptersSliver;
 
-  const _MangaBody({Key? key, required this.mangaPage, this.chaptersSliver})
+  const MangaBody({Key? key, required this.mangaDetails, this.chaptersSliver})
       : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isDescriptionExpanded = useState<bool>(false);
-    final mangaFavorites = ref.watch(mangaFavoritesProvider);
 
     bool isFavorited = false;
-
-    if (mangaFavorites
-        .any((element) => element.uniqueId == mangaPage.uniqueId)) {
-      isFavorited = true;
-    }
 
     return Scaffold(
       body: CustomScrollView(
@@ -77,7 +66,7 @@ class _MangaBody extends HookConsumerWidget {
             expandedHeight: 335,
             backgroundColor: Colors.grey[50],
             flexibleSpace: FlexibleSpaceBar(
-              background: Header(manga: mangaPage),
+              background: Header(manga: mangaDetails),
             ),
           ),
           SliverList(
@@ -94,7 +83,7 @@ class _MangaBody extends HookConsumerWidget {
                 Stack(
                   children: [
                     Text(
-                      mangaPage.description,
+                      mangaDetails.description,
                       style: const TextStyle(fontSize: 18),
                       overflow: TextOverflow.clip,
                       maxLines: isDescriptionExpanded.value ? null : 5,
@@ -152,17 +141,13 @@ class _MangaBody extends HookConsumerWidget {
   TextButton _buildFavoriteButton(WidgetRef ref, {bool isFavorited = false}) {
     if (!isFavorited) {
       return TextButton.icon(
-        onPressed: () {
-          ref.read(mangaFavoritesProvider.notifier).addFavoriteManga(mangaPage);
-        },
+        onPressed: () {},
         icon: const Icon(Icons.favorite_outline),
         label: const Text('Añadir a biblioteca'),
       );
     }
     return TextButton.icon(
-      onPressed: () {
-        ref.read(mangaFavoritesProvider.notifier).removeManga(mangaPage);
-      },
+      onPressed: () {},
       icon: const Icon(Icons.favorite),
       label: const Text('En biblioteca'),
     );

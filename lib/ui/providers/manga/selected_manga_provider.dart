@@ -1,7 +1,6 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:meronpan/domain/entities/manga_card.dart';
+import 'package:meronpan/domain/sources/models/manga.dart';
 
-final selectedMangaProvider = StateProvider<MangaCard>((ref) {
-  return const MangaCard(
-      id: '', title: '', coverPath: '', mangaUrl: '', sourceName: '');
+final selectedMangaProvider = StateProvider<Manga>((ref) {
+  return Manga(title: '', url: '');
 }, name: 'Selected Manga');

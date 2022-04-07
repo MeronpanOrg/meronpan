@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:meronpan/domain/entities/manga_card.dart';
+import 'package:meronpan/domain/sources/models/manga.dart';
 import 'package:meronpan/ui/providers/manga/selected_manga_provider.dart';
 import 'package:meronpan/ui/providers/manga/selected_mangas_provider.dart';
 import 'package:meronpan/ui/views/manga/manga_view.dart';
@@ -11,7 +11,7 @@ class GridCardsView extends ConsumerStatefulWidget {
   const GridCardsView({Key? key, required this.mangas, this.onScrollEnd})
       : super(key: key);
 
-  final List<MangaCard> mangas;
+  final List<Manga> mangas;
   final VoidCallback? onScrollEnd;
 
   @override
@@ -89,7 +89,7 @@ class _GridCardsViewState extends ConsumerState<GridCardsView> {
                       );
                     },
                     child: Hero(
-                      tag: mangas[index].id,
+                      tag: mangas[index].url,
                       child: MangaCover(
                         manga: mangas[index],
                       ),
