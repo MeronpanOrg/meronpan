@@ -2,11 +2,11 @@ import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:meronpan/domain/entities/manga_card.dart';
+import 'package:meronpan/domain/sources/models/manga.dart';
 import 'package:meronpan/ui/widgets/manga_cover.dart';
 
 class Header extends StatelessWidget {
-  final MangaCard manga;
+  final Manga manga;
 
   const Header({Key? key, required this.manga}) : super(key: key);
 
@@ -19,7 +19,7 @@ class Header extends StatelessWidget {
           decoration: BoxDecoration(
             image: DecorationImage(
                 image: CachedNetworkImageProvider(
-                  manga.coverPath,
+                  manga.thumbnailUrl,
                 ),
                 fit: BoxFit.cover),
           ),

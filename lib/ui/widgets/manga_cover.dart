@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:meronpan/domain/entities/manga_card.dart';
+import 'package:meronpan/domain/sources/models/manga.dart';
 
 class MangaCover extends StatelessWidget {
   const MangaCover(
       {Key? key, required this.manga, this.height = 170, this.width = 135})
       : super(key: key);
 
-  final MangaCard manga;
+  final Manga manga;
   final double height;
   final double width;
 
@@ -18,7 +18,7 @@ class MangaCover extends StatelessWidget {
       child: CachedNetworkImage(
         height: height,
         width: width,
-        imageUrl: manga.coverPath,
+        imageUrl: manga.thumbnailUrl,
         fit: BoxFit.cover,
       ),
     );
