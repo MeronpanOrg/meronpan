@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:meronpan/sources/es/tmo/providers/filter/tmo_filter_provider.dart';
 import 'package:meronpan/sources/es/tmo/providers/filters/tu_manga_online_filters_provider.dart';
 import 'package:meronpan/sources/es/tmo/views/explore/widgets/sort_by_expansion_panel.dart';
 import 'package:meronpan/sources/es/tmo/views/explore/widgets/widgets.dart';
@@ -11,19 +12,19 @@ class FilterDraggableScrollableSheet extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final typeSelection = ref.watch(tuMangaOnlineFiltersProvider).typeSelection;
+    final typeSelection = ref.watch(tmoRequestProvider).typeSelection;
     final statusSelection =
-        ref.watch(tuMangaOnlineFiltersProvider).statusSelection;
+        ref.watch(tmoRequestProvider).statusSelection;
     final translationStatusSelection =
-        ref.watch(tuMangaOnlineFiltersProvider).translationStatusSelection;
+        ref.watch(tmoRequestProvider).translationStatusSelection;
     final demographySelection =
-        ref.watch(tuMangaOnlineFiltersProvider).demographySelection;
+        ref.watch(tmoRequestProvider).demographySelection;
     final filterBySelection =
-        ref.watch(tuMangaOnlineFiltersProvider).filterBySelection;
-    final sort = ref.watch(tuMangaOnlineFiltersProvider).sort;
+        ref.watch(tmoRequestProvider).filterBySelection;
+    final sort = ref.watch(tmoRequestProvider).sort;
     final contentTypeList =
-        ref.watch(tuMangaOnlineFiltersProvider).contentTypeList;
-    final genreList = ref.watch(tuMangaOnlineFiltersProvider).genreList;
+        ref.watch(tmoRequestProvider).contentTypeList;
+    final genreList = ref.watch(tmoRequestProvider).genreList;
 
     return DraggableScrollableSheet(
       expand: false,

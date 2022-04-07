@@ -8,7 +8,7 @@ import 'package:meronpan/domain/sources/online/http_source.dart';
 import 'package:meronpan/sources/es/tmo/filters/tmo_filters.dart';
 import 'package:meronpan/domain/sources/models/filter.dart';
 
-class TMOSouce extends HttpSource {
+class TMOSource extends HttpSource {
   final Dio _dio = Dio();
 
   @override
