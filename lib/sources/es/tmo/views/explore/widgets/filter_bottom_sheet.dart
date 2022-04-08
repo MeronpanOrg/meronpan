@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:meronpan/sources/es/tmo/providers/filter/tmo_filter_provider.dart';
-import 'package:meronpan/sources/es/tmo/providers/filters/tu_manga_online_filters_provider.dart';
 import 'package:meronpan/sources/es/tmo/views/explore/widgets/sort_by_expansion_panel.dart';
 import 'package:meronpan/sources/es/tmo/views/explore/widgets/widgets.dart';
 
@@ -13,17 +12,14 @@ class FilterDraggableScrollableSheet extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final typeSelection = ref.watch(tmoRequestProvider).typeSelection;
-    final statusSelection =
-        ref.watch(tmoRequestProvider).statusSelection;
+    final statusSelection = ref.watch(tmoRequestProvider).statusSelection;
     final translationStatusSelection =
         ref.watch(tmoRequestProvider).translationStatusSelection;
     final demographySelection =
         ref.watch(tmoRequestProvider).demographySelection;
-    final filterBySelection =
-        ref.watch(tmoRequestProvider).filterBySelection;
+    final filterBySelection = ref.watch(tmoRequestProvider).filterBySelection;
     final sort = ref.watch(tmoRequestProvider).sort;
-    final contentTypeList =
-        ref.watch(tmoRequestProvider).contentTypeList;
+    final contentTypeList = ref.watch(tmoRequestProvider).contentTypeList;
     final genreList = ref.watch(tmoRequestProvider).genreList;
 
     return DraggableScrollableSheet(
@@ -35,58 +31,58 @@ class FilterDraggableScrollableSheet extends ConsumerWidget {
           controller: scrollController,
           children: [
             const BottomSheetTopBar(),
-            FilterBySelection(
+            FilterBySelectionField(
               label: typeSelection.name,
               items: typeSelection.values,
               onChanged: (index) {
                 ref
-                    .read(tuMangaOnlineFiltersProvider.notifier)
+                    .read(tmoRequestProvider.notifier)
                     .changeTypeSelectionState(index);
               },
               value: typeSelection.getPair,
             ),
             const Divider(),
-            FilterBySelection(
+            FilterBySelectionField(
               title: 'Ignorado sino se filtra por tipo',
               label: statusSelection.name,
               items: statusSelection.values,
               onChanged: (index) {
                 ref
-                    .read(tuMangaOnlineFiltersProvider.notifier)
+                    .read(tmoRequestProvider.notifier)
                     .changeStatusSelectionState(index);
               },
               value: statusSelection.getPair,
             ),
             const Divider(),
-            FilterBySelection(
+            FilterBySelectionField(
               title: 'Ignorado sino se filtra por tipo',
               label: translationStatusSelection.name,
               items: translationStatusSelection.values,
               onChanged: (index) {
                 ref
-                    .read(tuMangaOnlineFiltersProvider.notifier)
+                    .read(tmoRequestProvider.notifier)
                     .changeTranslationStatusSelectionState(index);
               },
               value: translationStatusSelection.getPair,
             ),
             const Divider(),
-            FilterBySelection(
+            FilterBySelectionField(
               label: demographySelection.name,
               items: demographySelection.values,
               onChanged: (index) {
                 ref
-                    .read(tuMangaOnlineFiltersProvider.notifier)
+                    .read(tmoRequestProvider.notifier)
                     .changeDemographySelectionState(index);
               },
               value: demographySelection.getPair,
             ),
             const Divider(),
-            FilterBySelection(
+            FilterBySelectionField(
               label: filterBySelection.name,
               items: filterBySelection.values,
               onChanged: (index) {
                 ref
-                    .read(tuMangaOnlineFiltersProvider.notifier)
+                    .read(tmoRequestProvider.notifier)
                     .changeFilterBySelectionState(index);
               },
               value: filterBySelection.getPair,
@@ -99,7 +95,7 @@ class FilterDraggableScrollableSheet extends ConsumerWidget {
                 print(index);
                 print(ascending);
                 ref
-                    .read(tuMangaOnlineFiltersProvider.notifier)
+                    .read(tmoRequestProvider.notifier)
                     .changeSortState(index, ascending);
               },
             ),
@@ -108,7 +104,7 @@ class FilterDraggableScrollableSheet extends ConsumerWidget {
               options: contentTypeList.content,
               onTap: (index, check) {
                 ref
-                    .read(tuMangaOnlineFiltersProvider.notifier)
+                    .read(tmoRequestProvider.notifier)
                     .changeContentTypeListState(index, check);
               },
             ),
@@ -117,7 +113,7 @@ class FilterDraggableScrollableSheet extends ConsumerWidget {
               options: genreList.genres,
               onTap: (index, check) {
                 ref
-                    .read(tuMangaOnlineFiltersProvider.notifier)
+                    .read(tmoRequestProvider.notifier)
                     .changeGenreListState(index, check);
               },
             )

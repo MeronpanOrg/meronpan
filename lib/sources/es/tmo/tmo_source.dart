@@ -5,6 +5,7 @@ import 'package:meronpan/domain/sources/models/manga.dart';
 import 'package:meronpan/domain/sources/models/mangas_page.dart';
 import 'package:meronpan/domain/sources/models/filter_list.dart';
 import 'package:meronpan/domain/sources/online/http_source.dart';
+import 'package:meronpan/domain/sources/utils/status_enum.dart';
 import 'package:meronpan/sources/es/tmo/filters/tmo_filters.dart';
 import 'package:meronpan/domain/sources/models/filter.dart';
 
@@ -25,6 +26,9 @@ class TMOSource extends HttpSource {
 
   @override
   String get lang => 'es';
+
+  @override
+  int get versionId => 1;
 
   String get getSFWUrlPart => true
       ? '&exclude_genders%5B%5D=6&exclude_genders%5B%5D=17&exclude_genders%5B%5D=18&exclude_genders%5B%5D=19&erotic=false'
@@ -54,6 +58,18 @@ class TMOSource extends HttpSource {
   }
 
   @override
+  Future<MangasPage?> fetchPopularManga(int page) async {
+    MangasPage? mangasPage;
+    try {
+      final res = await popularMangaRequest(page);
+      mangasPage = await popularMangaParse(res);
+    } on DioError catch (e) {
+      print(e.message);
+    }
+    return mangasPage;
+  }
+
+  @override
   Future<Response> latestUpdatesRequest(int page) async {
     final response = await client.get(
         '$baseUrl/library?order_item=creation&order_dir=desc&filter_by=title$getSFWUrlPart&_pg=1&page=$page',
@@ -74,6 +90,18 @@ class TMOSource extends HttpSource {
     final hasNextPage = document.querySelector('a.page-link');
 
     return MangasPage(mangas, hasNextPage != null);
+  }
+
+  @override
+  Future<MangasPage?> fetchLatestUpdates(int page) async {
+    MangasPage? mangasPage;
+    try {
+      final res = await latestUpdatesRequest(1);
+      mangasPage = await latestUpdatesParse(res);
+    } catch (e) {
+      print(e);
+    }
+    return mangasPage;
   }
 
   @override
@@ -99,8 +127,7 @@ class TMOSource extends HttpSource {
         queryParams.addAll({'translation_status': (element).toUriPart()});
       }
       if (element is FilterBySelection) {
-        queryParams.addAll(
-            {'filter_by': (element as TranslationStatusSelection).toString()});
+        queryParams.addAll({'filter_by': element.toString()});
       }
       if (element is Sort) {
         if (element.state != null) {
@@ -146,7 +173,8 @@ class TMOSource extends HttpSource {
     }
     final Uri url = Uri.https('lectortmo.com', '/library', queryParams);
 
-    final response = await client.getUri(url);
+    final response = await client.getUri(url,
+        options: Options(responseType: ResponseType.plain));
 
     return response;
   }
@@ -166,7 +194,17 @@ class TMOSource extends HttpSource {
   }
 
   @override
-  int get versionId => 1;
+  Future<MangasPage?> fetchSearchMangaParse(
+      int page, String query, FilterList filterList) async {
+    MangasPage? mangasPage;
+    try {
+      final res = await searchMangaRequest(page, query, filterList);
+      mangasPage = await searchMangaParse(res);
+    } catch (e) {
+      print(e);
+    }
+    return mangasPage;
+  }
 
   Manga popularMangaFromElement(Element element) {
     final link = element.querySelector('a');
@@ -175,15 +213,80 @@ class TMOSource extends HttpSource {
 
     final path = cover!.text;
 
-    final start = path.indexOf('(\'') + 1;
+    final start = path.indexOf('(\'') + 2;
     final end = path.indexOf('\')');
 
     final thumbnailUrl = path.substring(start, end);
 
     return Manga(
-      url: link!.attributes['href']!,
+      url: link!.attributes['href']!.trim(),
       title: title!.text,
       thumbnailUrl: thumbnailUrl,
     );
+  }
+
+  @override
+  Future<Response> mangaDetailsRequest(Manga manga) async {
+    final response = await client.get(manga.url,
+        options: Options(responseType: ResponseType.plain));
+
+    return response;
+  }
+
+  @override
+  Future<Manga> mangaDetailsParse(Response response) async {
+    final document = parse(response.data);
+
+    final title = document.querySelector('h2.element-subtitle')?.text;
+
+    final list = document.querySelectorAll('h5.card-title');
+
+    String? author;
+    String? artist;
+
+    if (list.isNotEmpty) {
+      author = list[0].attributes['title']!.substring(2);
+      artist = list[1].attributes['title']!.substring(2);
+    }
+
+    final description = document.querySelector('p.element-description')?.text;
+
+    final status =
+        parseStatus(document.querySelector('span.book-status')!.text);
+    final thumbnailUrl =
+        document.querySelector('.book-thumbnail')!.attributes['src'];
+
+    return Manga(
+        title: title ?? 'Sin titulo',
+        url: response.requestOptions.path,
+        description: description ?? 'Sin descripcion',
+        author: author ?? 'Sin autor',
+        artist: artist ?? 'Sin artista',
+        status: status,
+        thumbnailUrl: thumbnailUrl!);
+  }
+
+  @override
+  Future<MangasPage?> fetchMangaDetails(Manga manga) async {
+    Manga? details;
+    try {
+      final res = await mangaDetailsRequest(manga);
+      details = await mangaDetailsParse(
+        res,
+      );
+    } catch (e) {
+      print(e);
+    }
+    return MangasPage([details!], false);
+  }
+
+  statusEnum parseStatus(String status) {
+    switch (status) {
+      case 'Publicándose':
+        return statusEnum.ongoing;
+      case 'Finalizado':
+        return statusEnum.completed;
+    }
+    return statusEnum.unknown;
   }
 }

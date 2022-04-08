@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart' show useState;
 import 'package:meronpan/domain/sources/models/manga.dart';
+import 'package:meronpan/ui/providers/manga/manga_page_provider.dart';
+import 'package:meronpan/ui/providers/manga/selected_manga_provider.dart';
+import 'package:meronpan/ui/views/manga/shimmer_manga_view.dart';
 import 'package:meronpan/ui/views/manga/widgets/header.dart';
 
 class MangaView extends ConsumerWidget {
@@ -9,36 +12,25 @@ class MangaView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Container();
+    final selecteManga = ref.watch(selectedMangaProvider);
+    final mangaPage = ref.watch(mangaPageProvider);
 
-    // return mangaPage.when(initial: () {
-    //   Future.microtask(
-    //       () => ref.read(mangaPageProvider.notifier).getMangaPage(mangaCard));
-    //   return const ShimmerMangaView();
-    // }, loading: () {
-    //   return const ShimmerMangaView();
-    // }, data: (manga, chapters) {
-    //   final tiles = chapters.chapters.keys
-    //       .map(
-    //         (e) => ListTile(
-    //           title: Text(e),
-    //         ),
-    //       )
-    //       .toList();
-
-    //   return _MangaBody(
-    //     mangaDetails: manga,
-    //     chaptersSliver: SliverList(delegate: SliverChildListDelegate(tiles)),
-    //   );
-    // }, error: (err) {
-    //   return _buildMangaError();
-    // });
+    return mangaPage.when(initial: () {
+      Future.microtask(() =>
+          ref.read(mangaPageProvider.notifier).fetchMangaDetails(selecteManga));
+      return const ShimmerMangaView();
+    }, loading: () {
+      return const ShimmerMangaView();
+    }, data: (manga) {
+      return _MangaBody(
+        mangaDetails: manga,
+      );
+    }, error: (err) {
+      return _buildMangaError();
+    });
   }
 
-  Center buildChaptersError() =>
-      const Center(child: Text('Error al cargar capitulos'));
-
-  Scaffold buildMangaError() {
+  Scaffold _buildMangaError() {
     return Scaffold(
       appBar: AppBar(),
       body: const Center(child: Text('Error')),
@@ -46,11 +38,11 @@ class MangaView extends ConsumerWidget {
   }
 }
 
-class MangaBody extends HookConsumerWidget {
+class _MangaBody extends HookConsumerWidget {
   final Manga mangaDetails;
   final Widget? chaptersSliver;
 
-  const MangaBody({Key? key, required this.mangaDetails, this.chaptersSliver})
+  const _MangaBody({Key? key, required this.mangaDetails, this.chaptersSliver})
       : super(key: key);
 
   @override
@@ -82,37 +74,24 @@ class MangaBody extends HookConsumerWidget {
                 const SizedBox(height: 16),
                 Stack(
                   children: [
-                    Text(
-                      mangaDetails.description,
-                      style: const TextStyle(fontSize: 18),
-                      overflow: TextOverflow.clip,
-                      maxLines: isDescriptionExpanded.value ? null : 5,
-                    ),
-                    Positioned(
-                      bottom: 0,
-                      left: 0,
-                      right: 0,
-                      child: Container(
-                        decoration: const BoxDecoration(
-                          gradient: LinearGradient(
-                              colors: [Colors.white60, Colors.white12],
-                              begin: Alignment.bottomCenter,
-                              end: Alignment.topCenter),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            IconButton(
-                              onPressed: () {
-                                isDescriptionExpanded.value =
-                                    !isDescriptionExpanded.value;
-                              },
-                              icon: const Icon(Icons.keyboard_arrow_down_sharp),
-                            )
-                          ],
-                        ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Column(
+                        children: [
+                          Text(
+                            mangaDetails.description,
+                            style: const TextStyle(fontSize: 18),
+                            overflow: TextOverflow.clip,
+                            maxLines: isDescriptionExpanded.value ? null : 5,
+                          ),
+                          Container(
+                            height: 40,
+                          )
+                        ],
                       ),
                     ),
+                    if (mangaDetails.description.length > 200)
+                      _buildExpandDescriptionButton(isDescriptionExpanded),
                   ],
                 ),
                 Container(
@@ -134,6 +113,36 @@ class MangaBody extends HookConsumerWidget {
           ),
           if (chaptersSliver != null) chaptersSliver!
         ],
+      ),
+    );
+  }
+
+  Positioned _buildExpandDescriptionButton(
+      ValueNotifier<bool> isDescriptionExpanded) {
+    return Positioned(
+      bottom: 0,
+      left: 0,
+      right: 0,
+      child: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+              colors: [Colors.white60, Colors.white12],
+              begin: Alignment.bottomCenter,
+              end: Alignment.topCenter),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            IconButton(
+              onPressed: () {
+                isDescriptionExpanded.value = !isDescriptionExpanded.value;
+              },
+              icon: isDescriptionExpanded.value
+                  ? const Icon(Icons.keyboard_arrow_up)
+                  : const Icon(Icons.keyboard_arrow_down),
+            )
+          ],
+        ),
       ),
     );
   }
