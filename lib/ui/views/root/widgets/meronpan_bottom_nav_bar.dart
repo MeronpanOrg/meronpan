@@ -9,16 +9,27 @@ class MeronpanBottomNavBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return BottomNavigationBar(
-      currentIndex: ref.watch<int>(uiProvider),
-      onTap: (newIndex) {
+    return NavigationBar(
+      selectedIndex: ref.watch<int>(uiProvider),
+      onDestinationSelected: (newIndex) {
         ref.read(uiProvider.notifier).changeView(newIndex);
       },
-      items: const [
-        BottomNavigationBarItem(icon: Icon(Icons.book), label: 'Biblioteca'),
-        BottomNavigationBarItem(icon: Icon(Icons.explore), label: 'Explorar'),
-        BottomNavigationBarItem(
-            icon: Icon(Icons.settings), label: 'Configuración'),
+      destinations: const [
+        NavigationDestination(
+          icon: Icon(Icons.book_outlined),
+          label: 'Biblioteca',
+          selectedIcon: Icon(Icons.book),
+        ),
+        NavigationDestination(
+          icon: Icon(Icons.explore_outlined),
+          label: 'Explorar',
+          selectedIcon: Icon(Icons.explore),
+        ),
+        NavigationDestination(
+          icon: Icon(Icons.settings_outlined),
+          label: 'Configuración',
+          selectedIcon: Icon(Icons.settings),
+        ),
       ],
     );
   }

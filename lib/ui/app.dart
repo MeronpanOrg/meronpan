@@ -22,9 +22,14 @@ class MeronPanApp extends StatelessWidget {
           elevation: 0,
           foregroundColor: Colors.black,
         ),
-        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-          selectedItemColor: Colors.black,
-          selectedIconTheme: IconThemeData(size: 28),
+        scaffoldBackgroundColor: const Color.fromARGB(255, 250, 250, 250),
+        navigationBarTheme: NavigationBarThemeData(
+          backgroundColor: Colors.white,
+          indicatorColor: Colors.lightBlueAccent,
+          height: 70,
+          labelTextStyle: MaterialStateProperty.all(
+            const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+          ),
         ),
       ),
     );

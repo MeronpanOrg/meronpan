@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class FilterFAB extends StatelessWidget {
+class FilterFAB extends StatefulWidget {
   final VoidCallback onPressed;
 
   const FilterFAB({
@@ -9,9 +9,14 @@ class FilterFAB extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<FilterFAB> createState() => _FilterFABState();
+}
+
+class _FilterFABState extends State<FilterFAB> {
+  @override
   Widget build(BuildContext context) {
     return FloatingActionButton.extended(
-      onPressed: onPressed,
+      onPressed: widget.onPressed,
       icon: const Icon(Icons.filter_list),
       label: const Text(
         'Filtrar',

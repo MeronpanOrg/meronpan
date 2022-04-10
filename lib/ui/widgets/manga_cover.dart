@@ -13,13 +13,22 @@ class MangaCover extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(8),
-      child: CachedNetworkImage(
-        height: height,
-        width: width,
-        imageUrl: manga.thumbnailUrl,
-        fit: BoxFit.cover,
+    return Card(
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8), // if you need this
+          side: const BorderSide(color: Colors.white60)),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(8),
+        child: CachedNetworkImage(
+          height: height,
+          width: width,
+          imageUrl: manga.thumbnailUrl,
+          fit: BoxFit.cover,
+          progressIndicatorBuilder: (context, url, downloadProgress) => Center(
+              child:
+                  CircularProgressIndicator(value: downloadProgress.progress)),
+          errorWidget: (context, url, error) => const Icon(Icons.error),
+        ),
       ),
     );
   }

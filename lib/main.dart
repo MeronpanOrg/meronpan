@@ -34,8 +34,7 @@ void main() async {
 
   await Hive.initFlutter(dir.path);
 
-
-  await Hive.openBox<String>('settings');
+  await Hive.openBox('preferences');
 
   if (Platform.isWindows) {
     await windowManager.ensureInitialized();

@@ -1,6 +1,9 @@
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:dio/dio.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart' show parse;
+import 'package:meronpan/core/config/preferences/preferences_keys.dart';
+import 'package:meronpan/core/config/preferences/preferences_provider.dart';
 import 'package:meronpan/domain/sources/models/manga.dart';
 import 'package:meronpan/domain/sources/models/mangas_page.dart';
 import 'package:meronpan/domain/sources/models/filter_list.dart';
@@ -10,6 +13,10 @@ import 'package:meronpan/sources/es/tmo/filters/tmo_filters.dart';
 import 'package:meronpan/domain/sources/models/filter.dart';
 
 class TMOSource extends HttpSource {
+  Reader read;
+
+  TMOSource(this.read);
+
   final Dio _dio = Dio();
 
   @override
@@ -30,7 +37,13 @@ class TMOSource extends HttpSource {
   @override
   int get versionId => 1;
 
-  String get getSFWUrlPart => true
+  final sfwGenderId = ['6', '17', '18', '19'];
+
+  bool getSFWMode() {
+    return read(preferencesProvider).get(PreferencesKeys.sfw) ?? true;
+  }
+
+  String get getSFWUrlPart => !getSFWMode()
       ? '&exclude_genders%5B%5D=6&exclude_genders%5B%5D=17&exclude_genders%5B%5D=18&exclude_genders%5B%5D=19&erotic=false'
       : '';
 
@@ -113,6 +126,12 @@ class TMOSource extends HttpSource {
     queryParams.addAll({'_pg': '1'});
     queryParams.addAll({'title': query});
 
+    if (getSFWMode()) {
+      for (String element in sfwGenderId) {
+        queryParams.addAll({'exlude_gender[]': element});
+      }
+    }
+
     for (var element in filters.list) {
       if (element is TypeSelection) {
         queryParams.addAll({'type': (element).toUriPart()});
@@ -127,7 +146,7 @@ class TMOSource extends HttpSource {
         queryParams.addAll({'translation_status': (element).toUriPart()});
       }
       if (element is FilterBySelection) {
-        queryParams.addAll({'filter_by': element.toString()});
+        queryParams.addAll({'filter_by': element.toUriPart()});
       }
       if (element is Sort) {
         if (element.state != null) {
@@ -173,6 +192,8 @@ class TMOSource extends HttpSource {
     }
     final Uri url = Uri.https('lectortmo.com', '/library', queryParams);
 
+    print(url.toString());
+
     final response = await client.getUri(url,
         options: Options(responseType: ResponseType.plain));
 
@@ -194,7 +215,7 @@ class TMOSource extends HttpSource {
   }
 
   @override
-  Future<MangasPage?> fetchSearchMangaParse(
+  Future<MangasPage?> fetchSearchManga(
       int page, String query, FilterList filterList) async {
     MangasPage? mangasPage;
     try {
@@ -246,7 +267,10 @@ class TMOSource extends HttpSource {
 
     if (list.isNotEmpty) {
       author = list[0].attributes['title']!.substring(2);
-      artist = list[1].attributes['title']!.substring(2);
+
+      if (list.length > 1) {
+        artist = list[1].attributes['title']!.substring(2);
+      }
     }
 
     final description = document.querySelector('p.element-description')?.text;
@@ -271,9 +295,7 @@ class TMOSource extends HttpSource {
     Manga? details;
     try {
       final res = await mangaDetailsRequest(manga);
-      details = await mangaDetailsParse(
-        res,
-      );
+      details = await mangaDetailsParse(res);
     } catch (e) {
       print(e);
     }

@@ -1,3 +1,4 @@
+import 'package:meronpan/domain/sources/models/filter_list.dart';
 import 'package:meronpan/sources/es/tmo/filters/tmo_filters.dart';
 
 class TMORequest {
@@ -58,5 +59,18 @@ class TMORequest {
       genreList: genreList ?? this.genreList,
     );
   }
-}
 
+  FilterList getFilterList() {
+    return FilterList(list: [
+      typeSelection,
+      statusSelection,
+      translationStatusSelection,
+      demographySelection,
+      filterBySelection,
+      sort,
+      contentTypeList,
+      genreList,
+    ]);
+  }
+
+}

@@ -1,13 +1,17 @@
 import 'package:dio/dio.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:html/parser.dart' show parse;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:meronpan/domain/sources/models/filter_list.dart';
 import 'package:meronpan/domain/sources/models/manga.dart';
 import 'package:meronpan/sources/es/tmo/filters/tmo_filters.dart';
-import 'package:meronpan/sources/es/tmo/tmo_source.dart';
+import 'package:meronpan/sources/es/tmo/providers/source/tmo_source_provider.dart';
 
 void main() {
-  final source = TMOSource();
+
+ final container = ProviderContainer();
+ final source = container.read(tmoSourceProvider);
+
   late Response response;
   setUp(() async {
     response = await source.popularMangaRequest(1);
@@ -36,7 +40,7 @@ void main() {
   test(
     'search berserk',
     () async {
-      final mangaPages = await source.fetchSearchMangaParse(
+      final mangaPages = await source.fetchSearchManga(
         1,
         'berserk',
         FilterList(

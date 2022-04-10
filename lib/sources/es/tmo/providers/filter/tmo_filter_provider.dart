@@ -4,14 +4,14 @@ import 'package:meronpan/sources/es/tmo/filters/tmo_filters.dart';
 import 'package:meronpan/sources/es/tmo/filters/tmo_request.dart';
 import 'package:meronpan/domain/sources/models/filter.dart';
 
-final tmoRequestProvider =
-    StateNotifierProvider<TMORequestNotifier, TMORequest>(
+final tmoFilterProvider =
+    StateNotifierProvider<TMOFilterNotifier, TMORequest>(
         (ref) {
-  return TMORequestNotifier();
+  return TMOFilterNotifier();
 });
 
-class TMORequestNotifier extends StateNotifier<TMORequest> {
-  TMORequestNotifier()
+class TMOFilterNotifier extends StateNotifier<TMORequest> {
+  TMOFilterNotifier()
       : super(
           TMORequest.init(),
         );

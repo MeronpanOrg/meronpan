@@ -62,7 +62,7 @@ abstract class HttpSource implements Source {
   /// [page] the page number to retrieve.
   /// [query] the search query.
   /// [filters] the list of filters to apply.
-  Future<MangasPage?> fetchSearchMangaParse(
+  Future<MangasPage?> fetchSearchManga(
       int page, String query, FilterList filterList);
 
   /// Returns the request for the details of a manga. Override only if it's needed to change the
