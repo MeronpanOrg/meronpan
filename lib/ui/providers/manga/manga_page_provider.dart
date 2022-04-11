@@ -22,8 +22,11 @@ class MangaPageNotifier extends StateNotifier<MangaPageState> {
       state = const MangaPageState.loading();
 
       final page = await source.fetchMangaDetails(mangaSelected);
+      final res = await source.mangaDetailsRequest(mangaSelected);
+      final chapters = await source.chapterListParse(res);
+
       final manga = page!.mangas[0];
-      state = MangaPageState.data(page: manga);
+      state = MangaPageState.data(page: manga, chapters: chapters);
     } catch (e) {
       state = const MangaPageState.error('Imposible cargar la pagina');
     }

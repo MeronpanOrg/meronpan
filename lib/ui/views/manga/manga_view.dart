@@ -21,9 +21,24 @@ class MangaView extends ConsumerWidget {
       return const ShimmerMangaView();
     }, loading: () {
       return const ShimmerMangaView();
-    }, data: (manga) {
+    }, data: (manga, chapters) {
       return _MangaBody(
         mangaDetails: manga,
+        chaptersSliver: SliverFixedExtentList(
+          itemExtent: 80,
+          delegate: SliverChildBuilderDelegate((context, index) {
+            return ListTile(
+              title: Text(
+                chapters![index].name,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+              subtitle: Text(chapters[index].scanlator),
+              shape: const ContinuousRectangleBorder(
+                  side: BorderSide(color: Color(0xffe0e0e0))),
+            );
+          }, childCount: chapters!.length),
+        ),
       );
     }, error: (err) {
       return _buildMangaError();
@@ -122,7 +137,7 @@ class _MangaBody extends HookConsumerWidget {
     return Positioned(
       bottom: 0,
       left: 0,
-      right: 0,
+      right: 16,
       child: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -131,15 +146,18 @@ class _MangaBody extends HookConsumerWidget {
               end: Alignment.topCenter),
         ),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            IconButton(
+            TextButton.icon(
               onPressed: () {
                 isDescriptionExpanded.value = !isDescriptionExpanded.value;
               },
               icon: isDescriptionExpanded.value
                   ? const Icon(Icons.keyboard_arrow_up)
                   : const Icon(Icons.keyboard_arrow_down),
+              label: isDescriptionExpanded.value
+                  ? const Text('Menos')
+                  : const Text('Mas'),
             )
           ],
         ),

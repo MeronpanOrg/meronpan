@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:meronpan/domain/sources/models/manga.dart';
+import 'package:meronpan/domain/sources/utils/status_enum.dart';
 import 'package:meronpan/ui/widgets/manga_cover.dart';
 
 class Header extends StatelessWidget {
@@ -14,33 +15,7 @@ class Header extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Container(
-          width: double.maxFinite,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-                image: CachedNetworkImageProvider(
-                  manga.thumbnailUrl,
-                ),
-                fit: BoxFit.cover),
-          ),
-          child: ClipRRect(
-            child: BackdropFilter(
-              filter: ImageFilter.blur(
-                sigmaX: 3.0,
-                sigmaY: 3.0,
-              ),
-              child: Container(
-                alignment: Alignment.center,
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                      colors: [Colors.white, Colors.white24],
-                      begin: Alignment.bottomCenter,
-                      end: Alignment.topCenter),
-                ),
-              ),
-            ),
-          ),
-        ),
+        _buildBackground(),
         Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: 16.0,
@@ -57,13 +32,41 @@ class Header extends StatelessWidget {
                     height: 200,
                   ),
                   const SizedBox(
-                    width: 16,
+                    width: 8,
                   ),
-                  Expanded(
-                    child: Text(
-                      manga.title,
-                      style: const TextStyle(
-                          fontSize: 24, fontWeight: FontWeight.w500),
+                  SizedBox(
+                    height: 200,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        SizedBox(
+                          width: 250,
+                          child: Tooltip(
+                            message: manga.title,
+                            child: Text(
+                              manga.title,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                  fontSize: 22, fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          manga.author,
+                          style: const TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          manga.status.displayTitle,
+                          style: const TextStyle(
+                            fontSize: 16,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -72,6 +75,36 @@ class Header extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+
+  Container _buildBackground() {
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        image: DecorationImage(
+            image: CachedNetworkImageProvider(
+              manga.thumbnailUrl,
+            ),
+            fit: BoxFit.cover),
+      ),
+      child: ClipRRect(
+        child: BackdropFilter(
+          filter: ImageFilter.blur(
+            sigmaX: 3.0,
+            sigmaY: 3.0,
+          ),
+          child: Container(
+            alignment: Alignment.center,
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                  colors: [Colors.white, Colors.white24],
+                  begin: Alignment.bottomCenter,
+                  end: Alignment.topCenter),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

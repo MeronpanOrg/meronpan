@@ -26,9 +26,10 @@ class _$MangaPageStateTearOff {
     return const _MangaPageStateLoading();
   }
 
-  _MangaPageStateData data({required Manga page}) {
+  _MangaPageStateData data({required Manga page, List<Chapter>? chapters}) {
     return _MangaPageStateData(
       page: page,
+      chapters: chapters,
     );
   }
 
@@ -48,7 +49,7 @@ mixin _$MangaPageState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(Manga page) data,
+    required TResult Function(Manga page, List<Chapter>? chapters) data,
     required TResult Function(String? error) error,
   }) =>
       throw _privateConstructorUsedError;
@@ -56,7 +57,7 @@ mixin _$MangaPageState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(Manga page)? data,
+    TResult Function(Manga page, List<Chapter>? chapters)? data,
     TResult Function(String? error)? error,
   }) =>
       throw _privateConstructorUsedError;
@@ -64,7 +65,7 @@ mixin _$MangaPageState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(Manga page)? data,
+    TResult Function(Manga page, List<Chapter>? chapters)? data,
     TResult Function(String? error)? error,
     required TResult orElse(),
   }) =>
@@ -156,7 +157,7 @@ class _$_MangaPageStateInitial implements _MangaPageStateInitial {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(Manga page) data,
+    required TResult Function(Manga page, List<Chapter>? chapters) data,
     required TResult Function(String? error) error,
   }) {
     return initial();
@@ -167,7 +168,7 @@ class _$_MangaPageStateInitial implements _MangaPageStateInitial {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(Manga page)? data,
+    TResult Function(Manga page, List<Chapter>? chapters)? data,
     TResult Function(String? error)? error,
   }) {
     return initial?.call();
@@ -178,7 +179,7 @@ class _$_MangaPageStateInitial implements _MangaPageStateInitial {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(Manga page)? data,
+    TResult Function(Manga page, List<Chapter>? chapters)? data,
     TResult Function(String? error)? error,
     required TResult orElse(),
   }) {
@@ -273,7 +274,7 @@ class _$_MangaPageStateLoading implements _MangaPageStateLoading {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(Manga page) data,
+    required TResult Function(Manga page, List<Chapter>? chapters) data,
     required TResult Function(String? error) error,
   }) {
     return loading();
@@ -284,7 +285,7 @@ class _$_MangaPageStateLoading implements _MangaPageStateLoading {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(Manga page)? data,
+    TResult Function(Manga page, List<Chapter>? chapters)? data,
     TResult Function(String? error)? error,
   }) {
     return loading?.call();
@@ -295,7 +296,7 @@ class _$_MangaPageStateLoading implements _MangaPageStateLoading {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(Manga page)? data,
+    TResult Function(Manga page, List<Chapter>? chapters)? data,
     TResult Function(String? error)? error,
     required TResult orElse(),
   }) {
@@ -352,7 +353,7 @@ abstract class _$MangaPageStateDataCopyWith<$Res> {
   factory _$MangaPageStateDataCopyWith(
           _MangaPageStateData value, $Res Function(_MangaPageStateData) then) =
       __$MangaPageStateDataCopyWithImpl<$Res>;
-  $Res call({Manga page});
+  $Res call({Manga page, List<Chapter>? chapters});
 }
 
 /// @nodoc
@@ -369,12 +370,17 @@ class __$MangaPageStateDataCopyWithImpl<$Res>
   @override
   $Res call({
     Object? page = freezed,
+    Object? chapters = freezed,
   }) {
     return _then(_MangaPageStateData(
       page: page == freezed
           ? _value.page
           : page // ignore: cast_nullable_to_non_nullable
               as Manga,
+      chapters: chapters == freezed
+          ? _value.chapters
+          : chapters // ignore: cast_nullable_to_non_nullable
+              as List<Chapter>?,
     ));
   }
 }
@@ -382,14 +388,16 @@ class __$MangaPageStateDataCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_MangaPageStateData implements _MangaPageStateData {
-  const _$_MangaPageStateData({required this.page});
+  const _$_MangaPageStateData({required this.page, this.chapters});
 
   @override
   final Manga page;
+  @override
+  final List<Chapter>? chapters;
 
   @override
   String toString() {
-    return 'MangaPageState.data(page: $page)';
+    return 'MangaPageState.data(page: $page, chapters: $chapters)';
   }
 
   @override
@@ -397,12 +405,15 @@ class _$_MangaPageStateData implements _MangaPageStateData {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _MangaPageStateData &&
-            const DeepCollectionEquality().equals(other.page, page));
+            const DeepCollectionEquality().equals(other.page, page) &&
+            const DeepCollectionEquality().equals(other.chapters, chapters));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(page));
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(page),
+      const DeepCollectionEquality().hash(chapters));
 
   @JsonKey(ignore: true)
   @override
@@ -414,10 +425,10 @@ class _$_MangaPageStateData implements _MangaPageStateData {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(Manga page) data,
+    required TResult Function(Manga page, List<Chapter>? chapters) data,
     required TResult Function(String? error) error,
   }) {
-    return data(page);
+    return data(page, chapters);
   }
 
   @override
@@ -425,10 +436,10 @@ class _$_MangaPageStateData implements _MangaPageStateData {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(Manga page)? data,
+    TResult Function(Manga page, List<Chapter>? chapters)? data,
     TResult Function(String? error)? error,
   }) {
-    return data?.call(page);
+    return data?.call(page, chapters);
   }
 
   @override
@@ -436,12 +447,12 @@ class _$_MangaPageStateData implements _MangaPageStateData {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(Manga page)? data,
+    TResult Function(Manga page, List<Chapter>? chapters)? data,
     TResult Function(String? error)? error,
     required TResult orElse(),
   }) {
     if (data != null) {
-      return data(page);
+      return data(page, chapters);
     }
     return orElse();
   }
@@ -485,10 +496,11 @@ class _$_MangaPageStateData implements _MangaPageStateData {
 }
 
 abstract class _MangaPageStateData implements MangaPageState {
-  const factory _MangaPageStateData({required Manga page}) =
-      _$_MangaPageStateData;
+  const factory _MangaPageStateData(
+      {required Manga page, List<Chapter>? chapters}) = _$_MangaPageStateData;
 
   Manga get page;
+  List<Chapter>? get chapters;
   @JsonKey(ignore: true)
   _$MangaPageStateDataCopyWith<_MangaPageStateData> get copyWith =>
       throw _privateConstructorUsedError;
@@ -562,7 +574,7 @@ class _$_MangaPageStateError implements _MangaPageStateError {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(Manga page) data,
+    required TResult Function(Manga page, List<Chapter>? chapters) data,
     required TResult Function(String? error) error,
   }) {
     return error(this.error);
@@ -573,7 +585,7 @@ class _$_MangaPageStateError implements _MangaPageStateError {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(Manga page)? data,
+    TResult Function(Manga page, List<Chapter>? chapters)? data,
     TResult Function(String? error)? error,
   }) {
     return error?.call(this.error);
@@ -584,7 +596,7 @@ class _$_MangaPageStateError implements _MangaPageStateError {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(Manga page)? data,
+    TResult Function(Manga page, List<Chapter>? chapters)? data,
     TResult Function(String? error)? error,
     required TResult orElse(),
   }) {

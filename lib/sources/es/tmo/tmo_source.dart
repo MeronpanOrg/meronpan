@@ -4,6 +4,7 @@ import 'package:html/dom.dart';
 import 'package:html/parser.dart' show parse;
 import 'package:meronpan/core/config/preferences/preferences_keys.dart';
 import 'package:meronpan/core/config/preferences/preferences_provider.dart';
+import 'package:meronpan/domain/sources/models/chapter.dart';
 import 'package:meronpan/domain/sources/models/manga.dart';
 import 'package:meronpan/domain/sources/models/mangas_page.dart';
 import 'package:meronpan/domain/sources/models/filter_list.dart';
@@ -109,7 +110,7 @@ class TMOSource extends HttpSource {
   Future<MangasPage?> fetchLatestUpdates(int page) async {
     MangasPage? mangasPage;
     try {
-      final res = await latestUpdatesRequest(1);
+      final res = await latestUpdatesRequest(page);
       mangasPage = await latestUpdatesParse(res);
     } catch (e) {
       print(e);
@@ -258,36 +259,123 @@ class TMOSource extends HttpSource {
   Future<Manga> mangaDetailsParse(Response response) async {
     final document = parse(response.data);
 
-    final title = document.querySelector('h2.element-subtitle')?.text;
+    final title =
+        document.querySelector('h2.element-subtitle')?.text ?? ' Sin titulo';
 
     final list = document.querySelectorAll('h5.card-title');
 
-    String? author;
-    String? artist;
+    String author = '';
+    String artist = '';
 
     if (list.isNotEmpty) {
-      author = list[0].attributes['title']!.substring(2);
+      author = list[0].attributes['title']?.replaceAll(',', '') ?? 'Sin autor';
 
       if (list.length > 1) {
-        artist = list[1].attributes['title']!.substring(2);
+        artist =
+            list[1].attributes['title']?.replaceAll(',', '') ?? 'Sin artista';
       }
     }
 
-    final description = document.querySelector('p.element-description')?.text;
+    final description = document.querySelector('p.element-description')?.text ??
+        'Sin descripcion';
 
     final status =
-        parseStatus(document.querySelector('span.book-status')!.text);
+        parseStatus(document.querySelector('span.book-status')?.text ?? '');
     final thumbnailUrl =
-        document.querySelector('.book-thumbnail')!.attributes['src'];
+        document.querySelector('.book-thumbnail')?.attributes['src'] ?? '';
 
     return Manga(
-        title: title ?? 'Sin titulo',
+        title: title,
         url: response.requestOptions.path,
-        description: description ?? 'Sin descripcion',
-        author: author ?? 'Sin autor',
-        artist: artist ?? 'Sin artista',
+        description: description,
+        author: author,
+        artist: artist,
         status: status,
-        thumbnailUrl: thumbnailUrl!);
+        thumbnailUrl: thumbnailUrl);
+  }
+
+  String get _oneShotChapterListSelector => 'li.list-group-item';
+  String get _regularChapterListSelector => 'li.p-0.list-group-item';
+
+  Chapter oneShotChapterFromElement(Element element) {
+    final url =
+        element.querySelector('div.row > .text-right > a')?.attributes['href'];
+    const name = 'One Shot';
+    final scanlator =
+        element.querySelector('div.col-md-6.text-truncate')?.text.trim();
+
+    return Chapter(
+        url: url!,
+        name: name,
+        dateUpload: 1,
+        chapterNumber: 1,
+        scanlator: scanlator!);
+  }
+
+  Chapter regularChapterFromElement(
+      Element element, String chName, String number) {
+    final url = element
+            .querySelector('div.row > .text-right > a')
+            ?.attributes['href'] ??
+        '';
+    final name = chName;
+    final chapterNumber = double.parse(number);
+    final scanlator =
+        element.querySelector('div.col-md-6.text-truncate')?.text.trim() ?? '';
+    final dateUpload =
+        element.querySelector('span.badge.badge-primary.p-2')?.text;
+
+    return Chapter(
+        url: url,
+        name: name,
+        dateUpload: 1,
+        chapterNumber: chapterNumber,
+        scanlator: scanlator);
+  }
+
+  @override
+  Future<List<Chapter>> chapterListParse(Response response) async {
+    final document = parse(response.data);
+
+    // One-shot
+    if (document.querySelectorAll('div.chapters').isEmpty) {
+      return document
+          .querySelectorAll(_oneShotChapterListSelector)
+          .map((e) => oneShotChapterFromElement(e))
+          .toList();
+    }
+
+    List<Chapter> chapters = [];
+
+    document.querySelectorAll(_regularChapterListSelector).forEach((element) {
+      final chapternumber =
+          element.querySelector('a.btn-collapse')?.text ?? 'SN';
+      String num = '';
+      if (chapternumber.contains(':')) {
+        final end = chapternumber.indexOf(':');
+        final t = chapternumber.substring(0, end);
+        num = t.substring(t.indexOf('o') + 1).trim();
+      } else {
+        num = chapternumber.substring(chapternumber.indexOf('o') + 1).trim();
+      }
+
+      final name =
+          element.querySelector('div.col-10.text-truncate')?.text.trim() ??
+              'Sin nombre';
+
+      var translators = element.querySelectorAll('ul.chapter-list > li');
+
+      if (read(preferencesProvider).get(PreferencesKeys.showAllScans)) {
+        var scans = translators
+            .map((e) => regularChapterFromElement(e, name, num))
+            .toList();
+        chapters.addAll(scans);
+      } else {
+        var scan = regularChapterFromElement(translators.first, name, num);
+        chapters.add(scan);
+      }
+    });
+    return chapters;
   }
 
   @override

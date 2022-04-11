@@ -16,12 +16,31 @@ class ExploreSettingsView extends ConsumerWidget {
       body: ValueListenableBuilder(
         valueListenable: ref.read(preferencesProvider).listenable(),
         builder: (context, value, child) {
-          return SwitchListTile(
-            title: const Text('SFW'),
-            value: ref.read(preferencesProvider).get(PreferencesKeys.sfw) ?? true,
-            onChanged: (newValue) {
-              ref.read(preferencesProvider).put(PreferencesKeys.sfw, newValue);
-            },
+          return ListView(
+            children: [
+              SwitchListTile(
+                title: const Text('SFW'),
+                value: ref.read(preferencesProvider).get(PreferencesKeys.sfw) ??
+                    true,
+                onChanged: (newValue) {
+                  ref
+                      .read(preferencesProvider)
+                      .put(PreferencesKeys.sfw, newValue);
+                },
+              ),
+              SwitchListTile(
+                title: const Text('Mostrar todos los scanlator'),
+                value: ref
+                        .read(preferencesProvider)
+                        .get(PreferencesKeys.showAllScans) ??
+                    true,
+                onChanged: (newValue) {
+                  ref
+                      .read(preferencesProvider)
+                      .put(PreferencesKeys.showAllScans, newValue);
+                },
+              )
+            ],
           );
         },
       ),

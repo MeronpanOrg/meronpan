@@ -47,7 +47,7 @@ class BottomSheetTopBar extends ConsumerWidget {
               ),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 16,
           ),
           Row(
@@ -61,7 +61,7 @@ class BottomSheetTopBar extends ConsumerWidget {
                 ),
               ),
               SizedBox.fromSize(
-                size: Size(200, 40),
+                size: const Size(200, 40),
                 child: ElevatedButton(
                   onPressed: () {
                     ref.read(tmoMangasProvider.notifier).clean();

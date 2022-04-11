@@ -65,18 +65,21 @@ class ShimmerMangaView extends ConsumerWidget {
     );
   }
 
-  Column _buildBody() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _buildLine(width: double.infinity, height: 16),
-        const SizedBox(height: 16),
-        _buildLine(width: double.infinity, height: 16),
-        const SizedBox(height: 16),
-        _buildLine(width: double.infinity, height: 16),
-        const SizedBox(height: 16),
-        _buildLine(width: 250, height: 16),
-      ],
+  Widget _buildBody() {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildLine(width: double.infinity, height: 16),
+          const SizedBox(height: 16),
+          _buildLine(width: double.infinity, height: 16),
+          const SizedBox(height: 16),
+          _buildLine(width: double.infinity, height: 16),
+          const SizedBox(height: 16),
+          _buildLine(width: 250, height: 16),
+        ],
+      ),
     );
   }
 

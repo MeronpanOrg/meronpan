@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:meronpan/domain/sources/models/chapter.dart';
 import 'package:meronpan/domain/sources/models/manga.dart';
 
 part 'manga_page_state.freezed.dart';
@@ -12,9 +13,8 @@ class MangaPageState with _$MangaPageState {
   const factory MangaPageState.loading() = _MangaPageStateLoading;
 
   ///Data
-  const factory MangaPageState.data({
-    required Manga page,
-  }) = _MangaPageStateData;
+  const factory MangaPageState.data(
+      {required Manga page, List<Chapter>? chapters}) = _MangaPageStateData;
 
   ///Error
   const factory MangaPageState.error([String? error]) = _MangaPageStateError;

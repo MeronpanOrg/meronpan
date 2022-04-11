@@ -2,7 +2,7 @@ class Chapter {
   final String url;
   final String name;
   final int dateUpload;
-  final int chapterNumber;
+  final double chapterNumber;
   final String scanlator;
 
   Chapter({

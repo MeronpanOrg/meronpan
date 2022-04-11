@@ -17,3 +17,20 @@ enum statusEnum {
   @JsonValue(6)
   onHiatus,
 }
+
+extension StatusEnumExtension on statusEnum {
+  String get displayTitle {
+    switch (this) {
+      case statusEnum.unknown:
+        return 'Desconocido';
+      case statusEnum.ongoing:
+        return 'Publicándose';
+      case statusEnum.completed:
+        return 'Finalizado';
+      case statusEnum.cancelled:
+        return 'Cancelado';
+      default:
+        return 'Desconocido';
+    }
+  }
+}

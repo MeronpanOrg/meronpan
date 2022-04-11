@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:meronpan/domain/sources/models/chapter.dart';
 import 'package:meronpan/domain/sources/models/filter_list.dart';
 import 'package:meronpan/domain/sources/models/manga.dart';
 import 'package:meronpan/domain/sources/models/mangas_page.dart';
@@ -80,4 +81,9 @@ abstract class HttpSource implements Source {
   ///
   /// [manga] the manga to be updated.
   Future<MangasPage?> fetchMangaDetails(Manga manga);
+
+  /// Parses the response from the site and returns a list of chapters.
+  ///
+  /// [response] the response from the site.
+  Future<List<Chapter>> chapterListParse(Response response);
 }

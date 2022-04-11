@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:meronpan/ui/views/reader/reader_view.dart';
 
 import 'package:meronpan/ui/views/views.dart';
 
@@ -10,10 +11,11 @@ class MeronPanApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Meron Pan',
-      initialRoute: '/',
+      initialRoute: '/reader',
       routes: <String, WidgetBuilder>{
         '/': (_) => const RootView(),
-        '/manga': (context) => const MangaView()
+        '/manga': (context) => const MangaView(),
+        '/reader': (context) => ReaderView(),
       },
       themeMode: ThemeMode.system,
       theme: ThemeData.light().copyWith(
