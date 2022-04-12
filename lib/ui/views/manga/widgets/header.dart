@@ -25,48 +25,53 @@ class Header extends StatelessWidget {
               const SizedBox(
                 height: 80,
               ),
-              Row(
+              Flex(
+                direction: Axis.horizontal,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  MangaCover(
-                    manga: manga,
-                    height: 200,
+                  Flexible(
+                    flex: 1,
+                    child: MangaCover(
+                      manga: manga,
+                      height: 200,
+                    ),
                   ),
-                  const SizedBox(
-                    width: 8,
-                  ),
-                  SizedBox(
-                    height: 200,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        SizedBox(
-                          width: 250,
-                          child: Tooltip(
-                            message: manga.title,
-                            child: Text(
-                              manga.title,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                  fontSize: 22, fontWeight: FontWeight.w500),
+                  Flexible(
+                    flex: 2,
+                    child: SizedBox(
+                      height: 200,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          SizedBox(
+                            width: 230,
+                            child: Tooltip(
+                              message: manga.title,
+                              child: Text(
+                                manga.title,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                    fontSize: 22, fontWeight: FontWeight.w500),
+                              ),
                             ),
                           ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          manga.author,
-                          style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          manga.status.displayTitle,
-                          style: const TextStyle(
-                            fontSize: 16,
+                          const SizedBox(height: 8),
+                          Text(
+                            manga.author,
+                            style: const TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
                           ),
-                        ),
-                      ],
+                          const SizedBox(height: 8),
+                          Text(
+                            manga.status.displayTitle,
+                            style: const TextStyle(
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],

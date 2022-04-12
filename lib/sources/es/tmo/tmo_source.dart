@@ -264,8 +264,8 @@ class TMOSource extends HttpSource {
 
     final list = document.querySelectorAll('h5.card-title');
 
-    String author = '';
-    String artist = '';
+    String author = 'Sin autor';
+    String artist = 'Sin artista';
 
     if (list.isNotEmpty) {
       author = list[0].attributes['title']?.replaceAll(',', '') ?? 'Sin autor';

@@ -1,9 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:path/path.dart';
+
 import 'package:photo_view/photo_view.dart';
 
 class ReaderView extends StatefulWidget {
@@ -141,7 +139,15 @@ class _ReaderViewState extends State<ReaderView> {
             duration: const Duration(milliseconds: 100),
             child: Visibility(
               visible: _isVisible,
-              child: const ListTile(tileColor: Colors.red, title: const Text('<title>'), ),
+              child: Container(
+                height: 70,
+                color: Colors.redAccent,
+                child: Row(
+                  children: const [
+                    Text('<title>'),
+                  ],
+                ),
+              ),
             ),
           ),
           AnimatedPositioned(

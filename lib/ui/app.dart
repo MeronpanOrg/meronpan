@@ -11,11 +11,11 @@ class MeronPanApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Meron Pan',
-      initialRoute: '/reader',
+      initialRoute: '/',
       routes: <String, WidgetBuilder>{
         '/': (_) => const RootView(),
         '/manga': (context) => const MangaView(),
-        '/reader': (context) => ReaderView(),
+        '/reader': (context) => const ReaderView(),
       },
       themeMode: ThemeMode.system,
       theme: ThemeData.light().copyWith(

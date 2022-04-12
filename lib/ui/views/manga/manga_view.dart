@@ -22,14 +22,20 @@ class MangaView extends ConsumerWidget {
     }, loading: () {
       return const ShimmerMangaView();
     }, data: (manga, chapters) {
+      chapters!;
+
       return _MangaBody(
         mangaDetails: manga,
         chaptersSliver: SliverFixedExtentList(
           itemExtent: 80,
           delegate: SliverChildBuilderDelegate((context, index) {
             return ListTile(
+              onTap: () {
+                showAboutDialog(
+                    context: context, children: [Text(chapters[index].url)]);
+              },
               title: Text(
-                chapters![index].name,
+                chapters[index].name,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -37,7 +43,7 @@ class MangaView extends ConsumerWidget {
               shape: const ContinuousRectangleBorder(
                   side: BorderSide(color: Color(0xffe0e0e0))),
             );
-          }, childCount: chapters!.length),
+          }, childCount: chapters.length),
         ),
       );
     }, error: (err) {
@@ -45,11 +51,8 @@ class MangaView extends ConsumerWidget {
     });
   }
 
-  Scaffold _buildMangaError() {
-    return Scaffold(
-      appBar: AppBar(),
-      body: const Center(child: Text('Error')),
-    );
+  Widget _buildMangaError() {
+    return const ShimmerMangaView();
   }
 }
 
@@ -119,10 +122,6 @@ class _MangaBody extends HookConsumerWidget {
                     ),
                   ),
                 ),
-                if (chaptersSliver == null)
-                  const Center(
-                    child: CircularProgressIndicator(),
-                  )
               ],
             ),
           ),
@@ -138,29 +137,21 @@ class _MangaBody extends HookConsumerWidget {
       bottom: 0,
       left: 0,
       right: 16,
-      child: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-              colors: [Colors.white60, Colors.white12],
-              begin: Alignment.bottomCenter,
-              end: Alignment.topCenter),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            TextButton.icon(
-              onPressed: () {
-                isDescriptionExpanded.value = !isDescriptionExpanded.value;
-              },
-              icon: isDescriptionExpanded.value
-                  ? const Icon(Icons.keyboard_arrow_up)
-                  : const Icon(Icons.keyboard_arrow_down),
-              label: isDescriptionExpanded.value
-                  ? const Text('Menos')
-                  : const Text('Mas'),
-            )
-          ],
-        ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          TextButton.icon(
+            onPressed: () {
+              isDescriptionExpanded.value = !isDescriptionExpanded.value;
+            },
+            icon: isDescriptionExpanded.value
+                ? const Icon(Icons.keyboard_arrow_up)
+                : const Icon(Icons.keyboard_arrow_down),
+            label: isDescriptionExpanded.value
+                ? const Text('Menos')
+                : const Text('Mas'),
+          )
+        ],
       ),
     );
   }
