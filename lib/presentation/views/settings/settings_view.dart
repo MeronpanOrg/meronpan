@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:meronpan/ui/views/settings/views/explore_settings_view.dart';
+import 'package:meronpan/presentation/views/settings/views/explore_settings_view.dart';
 
 class SettingsView extends ConsumerWidget {
   const SettingsView({Key? key}) : super(key: key);

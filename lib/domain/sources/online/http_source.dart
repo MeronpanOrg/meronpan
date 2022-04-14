@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
-import 'package:meronpan/domain/sources/models/chapter.dart';
-import 'package:meronpan/domain/sources/models/filter_list.dart';
-import 'package:meronpan/domain/sources/models/manga.dart';
-import 'package:meronpan/domain/sources/models/mangas_page.dart';
+import 'package:meronpan/domain/models/chapter.dart';
+import 'package:meronpan/domain/models/filter_list.dart';
+import 'package:meronpan/domain/models/manga.dart';
+import 'package:meronpan/domain/models/mangas_page.dart';
 
 import '../source.dart';
 

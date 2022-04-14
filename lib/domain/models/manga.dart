@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:meronpan/domain/sources/utils/status_enum.dart';
+import 'package:meronpan/core/utils/status_enum.dart';
+
 
 part 'manga.g.dart';
 

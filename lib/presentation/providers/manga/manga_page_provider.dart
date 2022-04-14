@@ -1,34 +1,23 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:meronpan/domain/models/manga.dart';
-import 'package:meronpan/domain/sources/online/http_source.dart';
-import 'package:meronpan/sources/es/tmo/providers/source/tmo_source_provider.dart';
-import 'package:meronpan/ui/providers/manga/manga_page_state.dart';
+import 'package:meronpan/domain/use_cases/aget_manga_details_use_case.dart';
+import 'package:meronpan/domain/uses_cases.dart';
+
+import 'package:meronpan/presentation/providers/manga/manga_page_state.dart';
 
 final mangaPageProvider =
     StateNotifierProvider.autoDispose<MangaPageNotifier, MangaPageState>(
   (ref) {
-    return MangaPageNotifier(ref.watch(tmoSourceProvider));
+    return MangaPageNotifier(ref.watch(getMangasDetailsUseCaseProvider));
   },
   name: 'Manga Page Provider',
 );
 
 class MangaPageNotifier extends StateNotifier<MangaPageState> {
-  final HttpSource source;
+  final AGetMangaDetailsUseCase getMangaDetailsUseCase;
 
-  MangaPageNotifier(this.source) : super(const MangaPageState.initial());
+  MangaPageNotifier(this.getMangaDetailsUseCase)
+      : super(const MangaPageState.initial());
 
-  fetchMangaDetails(Manga mangaSelected) async {
-    try {
-      state = const MangaPageState.loading();
-
-      final page = await source.fetchMangaDetails(mangaSelected);
-      final res = await source.mangaDetailsRequest(mangaSelected);
-      final chapters = await source.chapterListParse(res);
-
-      final manga = page!.mangas[0];
-      state = MangaPageState.data(page: manga, chapters: chapters);
-    } catch (e) {
-      state = const MangaPageState.error('Imposible cargar la pagina');
-    }
-  }
+  fetchMangaDetails(Manga mangaSelected) async {}
 }

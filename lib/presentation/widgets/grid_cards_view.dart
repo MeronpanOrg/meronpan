@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:meronpan/domain/models/manga.dart';
-import 'package:meronpan/ui/providers/manga/selected_manga_provider.dart';
-import 'package:meronpan/ui/providers/manga/selected_mangas_provider.dart';
-import 'package:meronpan/ui/views/manga/manga_view.dart';
-import 'package:meronpan/ui/widgets/manga_cover.dart';
+import 'package:meronpan/presentation/providers/selected/selected_manga_provider.dart';
+import 'package:meronpan/presentation/providers/selected/selected_mangas_provider.dart';
+import 'package:meronpan/presentation/views/manga/manga_view.dart';
+import 'package:meronpan/presentation/widgets/manga_cover.dart';
 
 class GridCardsView extends ConsumerStatefulWidget {
   const GridCardsView({Key? key, required this.mangas, this.onScrollEnd})

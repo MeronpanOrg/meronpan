@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
-import 'package:meronpan/ui/app.dart';
+import 'package:meronpan/presentation/app.dart';
 import 'package:window_manager/window_manager.dart';
 
 class Logger extends ProviderObserver {

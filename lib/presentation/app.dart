@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:meronpan/ui/views/reader/reader_view.dart';
 
-import 'package:meronpan/ui/views/views.dart';
+import 'package:meronpan/presentation/views/views.dart';
 
 class MeronPanApp extends StatelessWidget {
   const MeronPanApp({Key? key}) : super(key: key);

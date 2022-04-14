@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:meronpan/ui/providers/manga/selected_manga_provider.dart';
-import 'package:meronpan/ui/views/manga/widgets/header.dart';
+import 'package:meronpan/presentation/providers/selected/selected_manga_provider.dart';
+import 'package:meronpan/presentation/views/manga/widgets/header.dart';
 
 const shimmerGradient = LinearGradient(
   colors: [

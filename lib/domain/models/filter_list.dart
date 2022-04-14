@@ -1,5 +1,5 @@
 
-import 'package:meronpan/domain/sources/models/filter.dart';
+import 'package:meronpan/domain/models/filter.dart';
 
 class FilterList {
   final List<Filter> list;

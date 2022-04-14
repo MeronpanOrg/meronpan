@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart' show useState;
 import 'package:meronpan/domain/models/manga.dart';
-import 'package:meronpan/ui/providers/manga/manga_page_provider.dart';
-import 'package:meronpan/ui/providers/manga/selected_manga_provider.dart';
-import 'package:meronpan/ui/views/manga/shimmer_manga_view.dart';
-import 'package:meronpan/ui/views/manga/widgets/header.dart';
+import 'package:meronpan/presentation/providers/manga/manga_page_provider.dart';
+import 'package:meronpan/presentation/providers/selected/selected_manga_provider.dart';
+import 'package:meronpan/presentation/views/manga/shimmer_manga_view.dart';
+import 'package:meronpan/presentation/views/manga/widgets/header.dart';
 
 class MangaView extends ConsumerWidget {
   const MangaView({Key? key}) : super(key: key);

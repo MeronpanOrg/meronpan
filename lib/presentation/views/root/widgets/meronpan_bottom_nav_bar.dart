@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:meronpan/ui/providers/ui/ui_provider.dart';
+import 'package:meronpan/presentation/providers/ui/ui_provider.dart';
 
 class MeronpanBottomNavBar extends ConsumerWidget {
   const MeronpanBottomNavBar({

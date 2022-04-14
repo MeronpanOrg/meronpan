@@ -4,7 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:meronpan/domain/models/manga.dart';
 import 'package:meronpan/core/utils/status_enum.dart';
-import 'package:meronpan/ui/widgets/manga_cover.dart';
+import 'package:meronpan/presentation/widgets/manga_cover.dart';
 
 class Header extends StatelessWidget {
   final Manga manga;

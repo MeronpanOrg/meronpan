@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
-import 'package:meronpan/domain/sources/utils/pair.dart';
+import 'package:meronpan/core/utils/pair.dart';
+
 
 enum triState { stateIgnore, stateInclude, stateExclude }
 
