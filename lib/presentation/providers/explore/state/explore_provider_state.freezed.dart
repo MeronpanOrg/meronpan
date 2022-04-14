@@ -26,6 +26,10 @@ class _$ExploreStateTearOff {
     return _loading<T>();
   }
 
+  _loadingMore<T> loadingMore<T>() {
+    return _loadingMore<T>();
+  }
+
   _success<T> success<T>(T data) {
     return _success<T>(
       data,
@@ -48,6 +52,7 @@ mixin _$ExploreState<T> {
   TResult when<TResult extends Object?>({
     required TResult Function() init,
     required TResult Function() loading,
+    required TResult Function() loadingMore,
     required TResult Function(T data) success,
     required TResult Function(String exception) error,
   }) =>
@@ -56,6 +61,7 @@ mixin _$ExploreState<T> {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? init,
     TResult Function()? loading,
+    TResult Function()? loadingMore,
     TResult Function(T data)? success,
     TResult Function(String exception)? error,
   }) =>
@@ -64,6 +70,7 @@ mixin _$ExploreState<T> {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? init,
     TResult Function()? loading,
+    TResult Function()? loadingMore,
     TResult Function(T data)? success,
     TResult Function(String exception)? error,
     required TResult orElse(),
@@ -73,6 +80,7 @@ mixin _$ExploreState<T> {
   TResult map<TResult extends Object?>({
     required TResult Function(_init<T> value) init,
     required TResult Function(_loading<T> value) loading,
+    required TResult Function(_loadingMore<T> value) loadingMore,
     required TResult Function(_success<T> value) success,
     required TResult Function(_error<T> value) error,
   }) =>
@@ -81,6 +89,7 @@ mixin _$ExploreState<T> {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(_init<T> value)? init,
     TResult Function(_loading<T> value)? loading,
+    TResult Function(_loadingMore<T> value)? loadingMore,
     TResult Function(_success<T> value)? success,
     TResult Function(_error<T> value)? error,
   }) =>
@@ -89,6 +98,7 @@ mixin _$ExploreState<T> {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_init<T> value)? init,
     TResult Function(_loading<T> value)? loading,
+    TResult Function(_loadingMore<T> value)? loadingMore,
     TResult Function(_success<T> value)? success,
     TResult Function(_error<T> value)? error,
     required TResult orElse(),
@@ -99,7 +109,7 @@ mixin _$ExploreState<T> {
 /// @nodoc
 abstract class $ExploreStateCopyWith<T, $Res> {
   factory $ExploreStateCopyWith(
-          ExploreState<T> value, $Res Function(ExploreState<T>) then) =
+          ExplorePaginatonState<T> value, $Res Function(ExplorePaginatonState<T>) then) =
       _$ExploreStateCopyWithImpl<T, $Res>;
 }
 
@@ -108,9 +118,9 @@ class _$ExploreStateCopyWithImpl<T, $Res>
     implements $ExploreStateCopyWith<T, $Res> {
   _$ExploreStateCopyWithImpl(this._value, this._then);
 
-  final ExploreState<T> _value;
+  final ExplorePaginatonState<T> _value;
   // ignore: unused_field
-  final $Res Function(ExploreState<T>) _then;
+  final $Res Function(ExplorePaginatonState<T>) _then;
 }
 
 /// @nodoc
@@ -153,6 +163,7 @@ class _$_init<T> extends _init<T> {
   TResult when<TResult extends Object?>({
     required TResult Function() init,
     required TResult Function() loading,
+    required TResult Function() loadingMore,
     required TResult Function(T data) success,
     required TResult Function(String exception) error,
   }) {
@@ -164,6 +175,7 @@ class _$_init<T> extends _init<T> {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? init,
     TResult Function()? loading,
+    TResult Function()? loadingMore,
     TResult Function(T data)? success,
     TResult Function(String exception)? error,
   }) {
@@ -175,6 +187,7 @@ class _$_init<T> extends _init<T> {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? init,
     TResult Function()? loading,
+    TResult Function()? loadingMore,
     TResult Function(T data)? success,
     TResult Function(String exception)? error,
     required TResult orElse(),
@@ -190,6 +203,7 @@ class _$_init<T> extends _init<T> {
   TResult map<TResult extends Object?>({
     required TResult Function(_init<T> value) init,
     required TResult Function(_loading<T> value) loading,
+    required TResult Function(_loadingMore<T> value) loadingMore,
     required TResult Function(_success<T> value) success,
     required TResult Function(_error<T> value) error,
   }) {
@@ -201,6 +215,7 @@ class _$_init<T> extends _init<T> {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(_init<T> value)? init,
     TResult Function(_loading<T> value)? loading,
+    TResult Function(_loadingMore<T> value)? loadingMore,
     TResult Function(_success<T> value)? success,
     TResult Function(_error<T> value)? error,
   }) {
@@ -212,6 +227,7 @@ class _$_init<T> extends _init<T> {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_init<T> value)? init,
     TResult Function(_loading<T> value)? loading,
+    TResult Function(_loadingMore<T> value)? loadingMore,
     TResult Function(_success<T> value)? success,
     TResult Function(_error<T> value)? error,
     required TResult orElse(),
@@ -223,7 +239,7 @@ class _$_init<T> extends _init<T> {
   }
 }
 
-abstract class _init<T> extends ExploreState<T> {
+abstract class _init<T> extends ExplorePaginatonState<T> {
   const factory _init() = _$_init<T>;
   const _init._() : super._();
 }
@@ -270,6 +286,7 @@ class _$_loading<T> extends _loading<T> {
   TResult when<TResult extends Object?>({
     required TResult Function() init,
     required TResult Function() loading,
+    required TResult Function() loadingMore,
     required TResult Function(T data) success,
     required TResult Function(String exception) error,
   }) {
@@ -281,6 +298,7 @@ class _$_loading<T> extends _loading<T> {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? init,
     TResult Function()? loading,
+    TResult Function()? loadingMore,
     TResult Function(T data)? success,
     TResult Function(String exception)? error,
   }) {
@@ -292,6 +310,7 @@ class _$_loading<T> extends _loading<T> {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? init,
     TResult Function()? loading,
+    TResult Function()? loadingMore,
     TResult Function(T data)? success,
     TResult Function(String exception)? error,
     required TResult orElse(),
@@ -307,6 +326,7 @@ class _$_loading<T> extends _loading<T> {
   TResult map<TResult extends Object?>({
     required TResult Function(_init<T> value) init,
     required TResult Function(_loading<T> value) loading,
+    required TResult Function(_loadingMore<T> value) loadingMore,
     required TResult Function(_success<T> value) success,
     required TResult Function(_error<T> value) error,
   }) {
@@ -318,6 +338,7 @@ class _$_loading<T> extends _loading<T> {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(_init<T> value)? init,
     TResult Function(_loading<T> value)? loading,
+    TResult Function(_loadingMore<T> value)? loadingMore,
     TResult Function(_success<T> value)? success,
     TResult Function(_error<T> value)? error,
   }) {
@@ -329,6 +350,7 @@ class _$_loading<T> extends _loading<T> {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_init<T> value)? init,
     TResult Function(_loading<T> value)? loading,
+    TResult Function(_loadingMore<T> value)? loadingMore,
     TResult Function(_success<T> value)? success,
     TResult Function(_error<T> value)? error,
     required TResult orElse(),
@@ -340,9 +362,133 @@ class _$_loading<T> extends _loading<T> {
   }
 }
 
-abstract class _loading<T> extends ExploreState<T> {
+abstract class _loading<T> extends ExplorePaginatonState<T> {
   const factory _loading() = _$_loading<T>;
   const _loading._() : super._();
+}
+
+/// @nodoc
+abstract class _$loadingMoreCopyWith<T, $Res> {
+  factory _$loadingMoreCopyWith(
+          _loadingMore<T> value, $Res Function(_loadingMore<T>) then) =
+      __$loadingMoreCopyWithImpl<T, $Res>;
+}
+
+/// @nodoc
+class __$loadingMoreCopyWithImpl<T, $Res>
+    extends _$ExploreStateCopyWithImpl<T, $Res>
+    implements _$loadingMoreCopyWith<T, $Res> {
+  __$loadingMoreCopyWithImpl(
+      _loadingMore<T> _value, $Res Function(_loadingMore<T>) _then)
+      : super(_value, (v) => _then(v as _loadingMore<T>));
+
+  @override
+  _loadingMore<T> get _value => super._value as _loadingMore<T>;
+}
+
+/// @nodoc
+
+class _$_loadingMore<T> extends _loadingMore<T> {
+  const _$_loadingMore() : super._();
+
+  @override
+  String toString() {
+    return 'ExploreState<$T>.loadingMore()';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _loadingMore<T>);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() init,
+    required TResult Function() loading,
+    required TResult Function() loadingMore,
+    required TResult Function(T data) success,
+    required TResult Function(String exception) error,
+  }) {
+    return loadingMore();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? init,
+    TResult Function()? loading,
+    TResult Function()? loadingMore,
+    TResult Function(T data)? success,
+    TResult Function(String exception)? error,
+  }) {
+    return loadingMore?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? init,
+    TResult Function()? loading,
+    TResult Function()? loadingMore,
+    TResult Function(T data)? success,
+    TResult Function(String exception)? error,
+    required TResult orElse(),
+  }) {
+    if (loadingMore != null) {
+      return loadingMore();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_init<T> value) init,
+    required TResult Function(_loading<T> value) loading,
+    required TResult Function(_loadingMore<T> value) loadingMore,
+    required TResult Function(_success<T> value) success,
+    required TResult Function(_error<T> value) error,
+  }) {
+    return loadingMore(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_init<T> value)? init,
+    TResult Function(_loading<T> value)? loading,
+    TResult Function(_loadingMore<T> value)? loadingMore,
+    TResult Function(_success<T> value)? success,
+    TResult Function(_error<T> value)? error,
+  }) {
+    return loadingMore?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_init<T> value)? init,
+    TResult Function(_loading<T> value)? loading,
+    TResult Function(_loadingMore<T> value)? loadingMore,
+    TResult Function(_success<T> value)? success,
+    TResult Function(_error<T> value)? error,
+    required TResult orElse(),
+  }) {
+    if (loadingMore != null) {
+      return loadingMore(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _loadingMore<T> extends ExplorePaginatonState<T> {
+  const factory _loadingMore() = _$_loadingMore<T>;
+  const _loadingMore._() : super._();
 }
 
 /// @nodoc
@@ -411,6 +557,7 @@ class _$_success<T> extends _success<T> {
   TResult when<TResult extends Object?>({
     required TResult Function() init,
     required TResult Function() loading,
+    required TResult Function() loadingMore,
     required TResult Function(T data) success,
     required TResult Function(String exception) error,
   }) {
@@ -422,6 +569,7 @@ class _$_success<T> extends _success<T> {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? init,
     TResult Function()? loading,
+    TResult Function()? loadingMore,
     TResult Function(T data)? success,
     TResult Function(String exception)? error,
   }) {
@@ -433,6 +581,7 @@ class _$_success<T> extends _success<T> {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? init,
     TResult Function()? loading,
+    TResult Function()? loadingMore,
     TResult Function(T data)? success,
     TResult Function(String exception)? error,
     required TResult orElse(),
@@ -448,6 +597,7 @@ class _$_success<T> extends _success<T> {
   TResult map<TResult extends Object?>({
     required TResult Function(_init<T> value) init,
     required TResult Function(_loading<T> value) loading,
+    required TResult Function(_loadingMore<T> value) loadingMore,
     required TResult Function(_success<T> value) success,
     required TResult Function(_error<T> value) error,
   }) {
@@ -459,6 +609,7 @@ class _$_success<T> extends _success<T> {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(_init<T> value)? init,
     TResult Function(_loading<T> value)? loading,
+    TResult Function(_loadingMore<T> value)? loadingMore,
     TResult Function(_success<T> value)? success,
     TResult Function(_error<T> value)? error,
   }) {
@@ -470,6 +621,7 @@ class _$_success<T> extends _success<T> {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_init<T> value)? init,
     TResult Function(_loading<T> value)? loading,
+    TResult Function(_loadingMore<T> value)? loadingMore,
     TResult Function(_success<T> value)? success,
     TResult Function(_error<T> value)? error,
     required TResult orElse(),
@@ -481,7 +633,7 @@ class _$_success<T> extends _success<T> {
   }
 }
 
-abstract class _success<T> extends ExploreState<T> {
+abstract class _success<T> extends ExplorePaginatonState<T> {
   const factory _success(T data) = _$_success<T>;
   const _success._() : super._();
 
@@ -555,6 +707,7 @@ class _$_error<T> extends _error<T> {
   TResult when<TResult extends Object?>({
     required TResult Function() init,
     required TResult Function() loading,
+    required TResult Function() loadingMore,
     required TResult Function(T data) success,
     required TResult Function(String exception) error,
   }) {
@@ -566,6 +719,7 @@ class _$_error<T> extends _error<T> {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? init,
     TResult Function()? loading,
+    TResult Function()? loadingMore,
     TResult Function(T data)? success,
     TResult Function(String exception)? error,
   }) {
@@ -577,6 +731,7 @@ class _$_error<T> extends _error<T> {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? init,
     TResult Function()? loading,
+    TResult Function()? loadingMore,
     TResult Function(T data)? success,
     TResult Function(String exception)? error,
     required TResult orElse(),
@@ -592,6 +747,7 @@ class _$_error<T> extends _error<T> {
   TResult map<TResult extends Object?>({
     required TResult Function(_init<T> value) init,
     required TResult Function(_loading<T> value) loading,
+    required TResult Function(_loadingMore<T> value) loadingMore,
     required TResult Function(_success<T> value) success,
     required TResult Function(_error<T> value) error,
   }) {
@@ -603,6 +759,7 @@ class _$_error<T> extends _error<T> {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(_init<T> value)? init,
     TResult Function(_loading<T> value)? loading,
+    TResult Function(_loadingMore<T> value)? loadingMore,
     TResult Function(_success<T> value)? success,
     TResult Function(_error<T> value)? error,
   }) {
@@ -614,6 +771,7 @@ class _$_error<T> extends _error<T> {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_init<T> value)? init,
     TResult Function(_loading<T> value)? loading,
+    TResult Function(_loadingMore<T> value)? loadingMore,
     TResult Function(_success<T> value)? success,
     TResult Function(_error<T> value)? error,
     required TResult orElse(),
@@ -625,7 +783,7 @@ class _$_error<T> extends _error<T> {
   }
 }
 
-abstract class _error<T> extends ExploreState<T> {
+abstract class _error<T> extends ExplorePaginatonState<T> {
   const factory _error(String exception) = _$_error<T>;
   const _error._() : super._();
 

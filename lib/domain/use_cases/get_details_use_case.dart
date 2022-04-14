@@ -1,11 +1,11 @@
 import 'package:meronpan/domain/repositories/http_repository.dart';
-import 'package:meronpan/domain/use_cases/aget_manga_details_use_case.dart';
+import 'package:meronpan/domain/use_cases/aget_details_use_case.dart';
 import 'package:meronpan/domain/models/manga.dart';
 
-class GetMangaDetailsUseCase extends AGetMangaDetailsUseCase {
+class GetDetailsUseCase extends AGetDetailsUseCase {
   final HttpSourceRepository httpRepository;
 
-  GetMangaDetailsUseCase({required this.httpRepository});
+  GetDetailsUseCase({required this.httpRepository});
 
   @override
   Future getMangaDetails(Manga manga) async {

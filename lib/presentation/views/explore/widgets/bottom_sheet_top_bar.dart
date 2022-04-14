@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:meronpan/presentation/providers/explore/explore_provider.dart';
 
-
 class BottomSheetTopBar extends ConsumerWidget {
   const BottomSheetTopBar({
     Key? key,
@@ -40,7 +39,10 @@ class BottomSheetTopBar extends ConsumerWidget {
                 width: 16,
               ),
               TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  ref.read(exploreProvider.notifier).clean();
+                  ref.read(exploreProvider.notifier).getLatest();
+                },
                 child: const Text(
                   'Actualizados',
                   style: TextStyle(color: Colors.black, fontSize: 16),
@@ -55,7 +57,9 @@ class BottomSheetTopBar extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  ref.read(exploreProvider.notifier).refresh();
+                },
                 child: const Text(
                   'Reiniciar',
                   style: TextStyle(color: Colors.black, fontSize: 16),

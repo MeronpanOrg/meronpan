@@ -23,7 +23,7 @@ class MeronPanApp extends StatelessWidget {
           elevation: 0,
           foregroundColor: Colors.black,
         ),
-        scaffoldBackgroundColor: const Color.fromARGB(255, 250, 250, 250),
+        scaffoldBackgroundColor: const Color.fromARGB(255, 240, 240, 240),
         navigationBarTheme: NavigationBarThemeData(
           backgroundColor: Colors.white,
           indicatorColor: Colors.lightBlueAccent,

@@ -1,5 +1,5 @@
 import 'package:meronpan/domain/models/manga.dart';
 
-abstract class AGetMangaDetailsUseCase {
+abstract class AGetDetailsUseCase {
   Future getMangaDetails(Manga manga) ;
 }

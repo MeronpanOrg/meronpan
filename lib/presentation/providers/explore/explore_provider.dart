@@ -1,20 +1,27 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:meronpan/domain/models/manga.dart';
-import 'package:meronpan/domain/use_cases/aget_mangas.dart';
+import 'package:meronpan/domain/use_cases/aget_latest.dart';
+import 'package:meronpan/domain/use_cases/aget_populars.dart';
 import 'package:meronpan/domain/uses_cases.dart';
 import 'package:meronpan/presentation/providers/explore/state/explore_provider_state.dart';
 
 final exploreProvider =
-    StateNotifierProvider<ExploreNotifier, ExploreState<List<Manga>>>((ref) {
-  return ExploreNotifier(ref.watch(getMangasUseCaseProvider));
+    StateNotifierProvider<ExploreNotifier, ExplorePaginatonState<List<Manga>>>((ref) {
+  return ExploreNotifier(
+    ref.watch(getPopularsUseCaseProvider),
+    ref.watch(getLatestUseCaseProvider),
+  );
 });
 
-class ExploreNotifier extends StateNotifier<ExploreState<List<Manga>>> {
-  final AGetMangasUseCase getMangasUseCase;
-  int _currentPage = 1;
-  bool canFetchMore = true;
+class ExploreNotifier extends StateNotifier<ExplorePaginatonState<List<Manga>>> {
+  final AGetPopularsUseCase getPopularsUseCase;
+  final AGetLatestUseCase getLatestUseCase;
 
-  ExploreNotifier(this.getMangasUseCase) : super(const ExploreState.init()) {
+  int _currentPage = 1;
+  bool _canFetchMore = true;
+
+  ExploreNotifier(this.getPopularsUseCase, this.getLatestUseCase)
+      : super(const ExplorePaginatonState.init()) {
     _init();
   }
 
@@ -23,33 +30,74 @@ class ExploreNotifier extends StateNotifier<ExploreState<List<Manga>>> {
       return;
     }
 
-    state = const ExploreState.loading();
+    state = const ExplorePaginatonState.loading();
 
-    final mangasPage = await getMangasUseCase.getMangas(_currentPage);
-    canFetchMore = mangasPage.hasNextpage;
+    final mangasPage = await getPopularsUseCase.getMangas(_currentPage);
+    _canFetchMore = mangasPage.hasNextpage;
     _currentPage++;
 
-    state = ExploreState.success(mangasPage.mangas);
+    state = ExplorePaginatonState.success(mangasPage.mangas);
   }
 
-  Future<void> getMoreMangas() async {
-    if (canFetchMore) {
+  Future<void> getLatest() async {
+    if (state.isLoading) {
+      return;
+    }
+
+    state = const ExplorePaginatonState.loading();
+
+    final mangasPage = await getLatestUseCase.getMangas(_currentPage);
+    _canFetchMore = mangasPage.hasNextpage;
+    _currentPage++;
+
+    state = ExplorePaginatonState.success(mangasPage.mangas);
+  }
+
+  Future<void> getMorePopulars() async {
+    if (_canFetchMore) {
       if (state.isLoading) {
         return;
       }
 
-      final mangasPage = await getMangasUseCase.getMangas(_currentPage);
-      canFetchMore = mangasPage.hasNextpage;
+      final pre = state.data ?? [];
+
+      state = const ExplorePaginatonState.loading();
+
+      final mangasPage = await getPopularsUseCase.getMangas(_currentPage);
+      _canFetchMore = mangasPage.hasNextpage;
       _currentPage++;
 
-      state = ExploreState.success([...state.data!, ...mangasPage.mangas]);
+      state = ExplorePaginatonState.success([...pre, ...mangasPage.mangas]);
+    }
+  }
+
+  Future<void> getMoreLatest() async {
+    if (_canFetchMore) {
+      if (state.isLoading) {
+        return;
+      }
+
+      final pre = state.data ?? [];
+
+      state = const ExplorePaginatonState.loading();
+
+      final mangasPage = await getLatestUseCase.getMangas(_currentPage);
+      _canFetchMore = mangasPage.hasNextpage;
+      _currentPage++;
+
+      state = ExplorePaginatonState.success([...pre, ...mangasPage.mangas]);
     }
   }
 
   void refresh() {
-    _currentPage = 1;
-    canFetchMore = true;
-    state = const ExploreState.init();
+    clean();
     _init();
+  }
+
+  void clean() {
+    _currentPage = 1;
+    _canFetchMore = true;
+    state = const ExplorePaginatonState.success([]);
+    state = const ExplorePaginatonState.init();
   }
 }

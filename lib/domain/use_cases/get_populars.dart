@@ -1,11 +1,11 @@
 import 'package:meronpan/domain/models/mangas_page.dart';
 import 'package:meronpan/domain/repositories/http_repository.dart';
-import 'package:meronpan/domain/use_cases/aget_mangas.dart';
+import 'package:meronpan/domain/use_cases/aget_populars.dart';
 
-class GetMangasUseCase extends AGetMangasUseCase {
+class GetPopularsUseCase extends AGetPopularsUseCase {
   final HttpSourceRepository httpRepository;
 
-  GetMangasUseCase({required this.httpRepository});
+  GetPopularsUseCase({required this.httpRepository});
 
   @override
   Future<MangasPage> getMangas(int page) async {
