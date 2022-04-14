@@ -1,5 +1,5 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:meronpan/domain/sources/models/manga.dart';
+import 'package:meronpan/domain/models/manga.dart';
 import 'package:meronpan/domain/sources/online/http_source.dart';
 import 'package:meronpan/sources/es/tmo/providers/source/tmo_source_provider.dart';
 import 'package:meronpan/ui/providers/manga/manga_page_state.dart';

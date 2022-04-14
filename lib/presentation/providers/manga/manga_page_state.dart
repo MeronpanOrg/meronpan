@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:meronpan/domain/sources/models/chapter.dart';
-import 'package:meronpan/domain/sources/models/manga.dart';
+import 'package:meronpan/domain/models/chapter.dart';
+import 'package:meronpan/domain/models/manga.dart';
 
 part 'manga_page_state.freezed.dart';
 

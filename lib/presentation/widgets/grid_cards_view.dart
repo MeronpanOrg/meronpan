@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:meronpan/domain/sources/models/manga.dart';
+import 'package:meronpan/domain/models/manga.dart';
 import 'package:meronpan/ui/providers/manga/selected_manga_provider.dart';
 import 'package:meronpan/ui/providers/manga/selected_mangas_provider.dart';
 import 'package:meronpan/ui/views/manga/manga_view.dart';

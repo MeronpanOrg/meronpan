@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:meronpan/domain/sources/models/manga.dart';
+import 'package:meronpan/domain/models/manga.dart';
 
 class MangaCover extends StatelessWidget {
   const MangaCover(
