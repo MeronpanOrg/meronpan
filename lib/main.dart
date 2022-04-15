@@ -1,10 +1,11 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
-import 'package:meronpan/ui/app.dart';
+import 'package:meronpan/presentation/app.dart';
 import 'package:window_manager/window_manager.dart';
 
 class Logger extends ProviderObserver {
@@ -34,8 +35,7 @@ void main() async {
 
   await Hive.initFlutter(dir.path);
 
-
-  await Hive.openBox<String>('settings');
+  await Hive.openBox('preferences');
 
   if (Platform.isWindows) {
     await windowManager.ensureInitialized();
@@ -49,6 +49,8 @@ void main() async {
       await windowManager.setSkipTaskbar(false);
     });
   }
+
+  // debugRepaintRainbowEnabled = true;
 
   runApp(
     ProviderScope(

@@ -1,7 +1,8 @@
 import 'package:dio/dio.dart';
-import 'package:meronpan/domain/sources/models/filter_list.dart';
-import 'package:meronpan/domain/sources/models/manga.dart';
-import 'package:meronpan/domain/sources/models/mangas_page.dart';
+import 'package:meronpan/domain/models/chapter.dart';
+import 'package:meronpan/domain/models/filter_list.dart';
+import 'package:meronpan/domain/models/manga.dart';
+import 'package:meronpan/domain/models/mangas_page.dart';
 
 import '../source.dart';
 
@@ -62,7 +63,7 @@ abstract class HttpSource implements Source {
   /// [page] the page number to retrieve.
   /// [query] the search query.
   /// [filters] the list of filters to apply.
-  Future<MangasPage?> fetchSearchMangaParse(
+  Future<MangasPage?> fetchSearchManga(
       int page, String query, FilterList filterList);
 
   /// Returns the request for the details of a manga. Override only if it's needed to change the
@@ -80,4 +81,9 @@ abstract class HttpSource implements Source {
   ///
   /// [manga] the manga to be updated.
   Future<MangasPage?> fetchMangaDetails(Manga manga);
+
+  /// Parses the response from the site and returns a list of chapters.
+  ///
+  /// [response] the response from the site.
+  Future<List<Chapter>> chapterListParse(Response response);
 }

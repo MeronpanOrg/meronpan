@@ -36,7 +36,6 @@ dependencies:
   cupertino_icons: ^1.0.2
   hive: ^2.0.6
   equatable: ^2.0.3
-  web_scraper: ^0.1.4
   cached_network_image: ^3.2.0
   hooks_riverpod: ^1.0.3
   hive_flutter: ^1.1.0
@@ -46,6 +45,10 @@ dependencies:
   freezed_annotation: ^1.1.0
   json_annotation: ^4.4.0
   dio: ^4.0.6
+  flutter_cache_manager: ^3.3.0
+  path: ^1.8.0
+  photo_view: ^0.13.0
+  dio_cache_interceptor: ^3.2.6
 
 dev_dependencies:
   flutter_test:
