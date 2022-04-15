@@ -1,103 +1,78 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:meronpan/domain/models/manga.dart';
+import 'package:meronpan/domain/models/mangas_page.dart';
 import 'package:meronpan/domain/use_cases/aget_latest.dart';
 import 'package:meronpan/domain/use_cases/aget_populars.dart';
 import 'package:meronpan/domain/uses_cases.dart';
 import 'package:meronpan/presentation/providers/explore/state/explore_provider_state.dart';
 
 final exploreProvider =
-    StateNotifierProvider<ExploreNotifier, ExplorePaginatonState<List<Manga>>>((ref) {
+    StateNotifierProvider.autoDispose<ExploreNotifier, ExplorePaginaton>((ref) {
+  ref.maintainState = true;
+
   return ExploreNotifier(
     ref.watch(getPopularsUseCaseProvider),
     ref.watch(getLatestUseCaseProvider),
   );
 });
 
-class ExploreNotifier extends StateNotifier<ExplorePaginatonState<List<Manga>>> {
+class ExploreNotifier extends StateNotifier<ExplorePaginaton> {
   final AGetPopularsUseCase getPopularsUseCase;
   final AGetLatestUseCase getLatestUseCase;
 
   int _currentPage = 1;
-  bool _canFetchMore = true;
 
   ExploreNotifier(this.getPopularsUseCase, this.getLatestUseCase)
-      : super(const ExplorePaginatonState.init()) {
-    _init();
+      : super(const ExplorePaginaton()) {
+    getPopulars();
   }
 
-  Future<void> _init() async {
-    if (state.isLoading) {
+  Future<void> _getMangas(Future<MangasPage> Function(int) callback) async {
+    if (state.hasLoadMoreDone || state.status == ExploreStatus.ongoing) {
       return;
     }
 
-    state = const ExplorePaginatonState.loading();
+    try {
+      if (state.status == ExploreStatus.initial) {
+        state = state.copyWith(status: ExploreStatus.ongoing);
 
-    final mangasPage = await getPopularsUseCase.getMangas(_currentPage);
-    _canFetchMore = mangasPage.hasNextpage;
-    _currentPage++;
+        final mangasPage = await callback(1);
+        _currentPage++;
 
-    state = ExplorePaginatonState.success(mangasPage.mangas);
+        state = state.copyWith(
+            mangas: mangasPage.mangas,
+            hasLoadMoreDone: !mangasPage.hasNextpage,
+            status: ExploreStatus.success);
+      }
+
+      state = state.copyWith(status: ExploreStatus.ongoing);
+
+      final mangasPage = await getPopularsUseCase.getMangas(_currentPage);
+      _currentPage++;
+
+      state = state.copyWith(
+          mangas: List.of(state.mangas)..addAll(mangasPage.mangas),
+          hasLoadMoreDone: !mangasPage.hasNextpage,
+          status: ExploreStatus.success);
+    } catch (_) {
+      state = state.copyWith(status: ExploreStatus.failure);
+    }
+  }
+
+  Future<void> getPopulars() async {
+    await _getMangas(getPopularsUseCase.getMangas);
   }
 
   Future<void> getLatest() async {
-    if (state.isLoading) {
-      return;
-    }
-
-    state = const ExplorePaginatonState.loading();
-
-    final mangasPage = await getLatestUseCase.getMangas(_currentPage);
-    _canFetchMore = mangasPage.hasNextpage;
-    _currentPage++;
-
-    state = ExplorePaginatonState.success(mangasPage.mangas);
-  }
-
-  Future<void> getMorePopulars() async {
-    if (_canFetchMore) {
-      if (state.isLoading) {
-        return;
-      }
-
-      final pre = state.data ?? [];
-
-      state = const ExplorePaginatonState.loading();
-
-      final mangasPage = await getPopularsUseCase.getMangas(_currentPage);
-      _canFetchMore = mangasPage.hasNextpage;
-      _currentPage++;
-
-      state = ExplorePaginatonState.success([...pre, ...mangasPage.mangas]);
-    }
-  }
-
-  Future<void> getMoreLatest() async {
-    if (_canFetchMore) {
-      if (state.isLoading) {
-        return;
-      }
-
-      final pre = state.data ?? [];
-
-      state = const ExplorePaginatonState.loading();
-
-      final mangasPage = await getLatestUseCase.getMangas(_currentPage);
-      _canFetchMore = mangasPage.hasNextpage;
-      _currentPage++;
-
-      state = ExplorePaginatonState.success([...pre, ...mangasPage.mangas]);
-    }
+    await _getMangas(getLatestUseCase.getMangas);
   }
 
   void refresh() {
     clean();
-    _init();
+    getPopulars();
   }
 
   void clean() {
     _currentPage = 1;
-    _canFetchMore = true;
-    state = const ExplorePaginatonState.success([]);
-    state = const ExplorePaginatonState.init();
+    state = const ExplorePaginaton();
   }
 }

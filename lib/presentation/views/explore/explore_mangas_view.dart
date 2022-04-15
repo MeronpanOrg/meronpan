@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:meronpan/presentation/providers/explore/explore_provider.dart';
-import 'package:meronpan/presentation/providers/explore/mangas_provider.dart';
+import 'package:meronpan/presentation/providers/explore/state/explore_provider_state.dart';
 import 'package:meronpan/presentation/providers/selected/selected_manga_provider.dart';
 import 'package:meronpan/presentation/views/explore/widgets/filter_bottom_sheet.dart';
 import 'package:meronpan/presentation/views/explore/widgets/filter_fab.dart';
@@ -19,7 +19,7 @@ class _ExploreMangasViewState extends ConsumerState<ExploreMangasView> {
 
   void _onScroll() {
     if (_isBottom) {
-      ref.read(exploreProvider.notifier).getMorePopulars();
+      ref.read(exploreProvider.notifier).getPopulars();
     }
   }
 
@@ -48,25 +48,25 @@ class _ExploreMangasViewState extends ConsumerState<ExploreMangasView> {
   @override
   Widget build(BuildContext context) {
     final exploreMangas = ref.watch(exploreProvider);
-    final tempMangas = ref.watch(mangasProvider);
-
 
     return Scaffold(
       body: Stack(
         children: [
           Consumer(
             builder: (context, ref, child) {
-              if (exploreMangas.isError) return _buildError();
-              if (tempMangas.isNotEmpty) {
-                final mangas = tempMangas;
+              if (exploreMangas.status == ExploreStatus.failure) {
+                return _buildError();
+              }
+              if (exploreMangas.mangas.isNotEmpty) {
+                final mangas = exploreMangas.mangas;
 
                 return CustomScrollView(
                   controller: _scrollController,
                   slivers: [
                     SliverAppBar(
+                      leading: const Icon(Icons.search),
                       floating: true,
                       backgroundColor: Colors.white,
-                      shape: const StadiumBorder(),
                       actions: [
                         IconButton(
                           onPressed: () {},
@@ -125,7 +125,7 @@ class _ExploreMangasViewState extends ConsumerState<ExploreMangasView> {
               return _buildLoading();
             },
           ),
-          if (exploreMangas.isLoadingMore)
+          if (exploreMangas.status == ExploreStatus.ongoing)
             const Positioned(
               bottom: -40,
               left: 0,

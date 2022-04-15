@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart' show useState;
+import 'package:meronpan/domain/models/chapter.dart';
 import 'package:meronpan/domain/models/manga.dart';
 import 'package:meronpan/presentation/providers/manga/manga_page_provider.dart';
+import 'package:meronpan/presentation/providers/manga/page_state.dart';
 import 'package:meronpan/presentation/providers/selected/selected_manga_provider.dart';
 import 'package:meronpan/presentation/views/manga/shimmer_manga_view.dart';
 import 'package:meronpan/presentation/views/manga/widgets/header.dart';
@@ -12,43 +14,61 @@ class MangaView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final selecteManga = ref.watch(selectedMangaProvider);
-    final mangaPage = ref.watch(mangaPageProvider);
+    final page = ref.watch(mangaPageProvider);
 
-    return mangaPage.when(initial: () {
-      Future.microtask(() =>
-          ref.read(mangaPageProvider.notifier).fetchMangaDetails(selecteManga));
+    if (page.status == PageStatus.initial) {
+      Future.microtask(
+          () => ref.read(mangaPageProvider.notifier).fetchMangaDetails());
       return const ShimmerMangaView();
-    }, loading: () {
-      return const ShimmerMangaView();
-    }, data: (manga, chapters) {
-      chapters!;
+    }
 
-      return _MangaBody(
-        mangaDetails: manga,
-        chaptersSliver: SliverFixedExtentList(
-          itemExtent: 80,
-          delegate: SliverChildBuilderDelegate((context, index) {
-            return ListTile(
-              onTap: () {
-                showAboutDialog(
-                    context: context, children: [Text(chapters[index].url)]);
-              },
-              title: Text(
-                chapters[index].name,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-              subtitle: Text(chapters[index].scanlator),
-              shape: const ContinuousRectangleBorder(
-                  side: BorderSide(color: Color(0xffe0e0e0))),
-            );
-          }, childCount: chapters.length),
-        ),
-      );
-    }, error: (err) {
+    if (page.status == PageStatus.failure) {
       return _buildMangaError();
-    });
+    }
+
+    final manga = page.mangaDetails.manga;
+    final chapters = page.mangaDetails.chapters;
+
+    return _MangaBody(
+      mangaDetails: manga,
+      chaptersSliver: SliverFixedExtentList(
+        itemExtent: 80,
+        delegate: _buildChapters(chapters),
+      ),
+    );
+  }
+
+  SliverChildBuilderDelegate _buildChapters(List<Chapter> chapters) {
+    if (chapters.isEmpty) {
+      return SliverChildBuilderDelegate(
+        (context, index) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        },
+        childCount: 1,
+      );
+    }
+
+    return SliverChildBuilderDelegate(
+      (context, index) {
+        return ListTile(
+          onTap: () {
+            showAboutDialog(
+                context: context, children: [Text(chapters[index].url)]);
+          },
+          title: Text(
+            chapters[index].name,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+          subtitle: Text(chapters[index].scanlator),
+          shape: const ContinuousRectangleBorder(
+              side: BorderSide(color: Color(0xffe0e0e0))),
+        );
+      },
+      childCount: chapters.length,
+    );
   }
 
   Widget _buildMangaError() {
