@@ -1,6 +1,6 @@
 import 'package:meronpan/domain/models/mangas_page.dart';
 import 'package:meronpan/domain/repositories/http_repository.dart';
-import 'package:meronpan/domain/use_cases/aget_populars.dart';
+import 'package:meronpan/domain/use_cases/interfaces/aget_populars.dart';
 
 class GetPopularsUseCase extends AGetPopularsUseCase {
   final HttpSourceRepository httpRepository;

@@ -62,6 +62,7 @@ class _ReaderViewState extends State<ReaderView> {
       PhotoView(
         enableRotation: false,
         imageProvider: const CachedNetworkImageProvider(
+          
           'https://img1.japanreader.com/uploads/20150211/5af44bf6d18eb/0015_074251.jpg',
           headers: {
             'User-Agent':

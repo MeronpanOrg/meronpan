@@ -17,6 +17,10 @@ class ExploreMangasView extends ConsumerStatefulWidget {
 class _ExploreMangasViewState extends ConsumerState<ExploreMangasView> {
   final ScrollController _scrollController = ScrollController();
 
+  final _searchQueryController = TextEditingController();
+  bool _isSearching = false;
+  String searchQuery = 'Search query';
+
   void _onScroll() {
     if (_isBottom) {
       ref.read(exploreProvider.notifier).getPopulars();
@@ -64,25 +68,30 @@ class _ExploreMangasViewState extends ConsumerState<ExploreMangasView> {
                   controller: _scrollController,
                   slivers: [
                     SliverAppBar(
-                      leading: const Icon(Icons.search),
+                      elevation: 10,
+                      leading: !_isSearching ? const Icon(Icons.search) : null,
                       floating: true,
                       backgroundColor: Colors.white,
-                      actions: [
-                        IconButton(
-                          onPressed: () {},
-                          icon: const Icon(Icons.view_list_sharp),
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            ref.read(exploreProvider.notifier).refresh();
-                          },
-                          icon: const Icon(Icons.refresh),
-                        ),
-                        IconButton(
-                          onPressed: () {},
-                          icon: const Icon(Icons.more_vert),
-                        ),
-                      ],
+                      shape: const StadiumBorder(),
+                      title: _buildSearchField(),
+                      actions: !_isSearching
+                          ? [
+                              IconButton(
+                                onPressed: () {},
+                                icon: const Icon(Icons.view_list_sharp),
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  ref.read(exploreProvider.notifier).refresh();
+                                },
+                                icon: const Icon(Icons.refresh),
+                              ),
+                              IconButton(
+                                onPressed: () {},
+                                icon: const Icon(Icons.more_vert),
+                              ),
+                            ]
+                          : [],
                     ),
                     SliverGrid(
                       delegate: SliverChildBuilderDelegate(
@@ -125,15 +134,15 @@ class _ExploreMangasViewState extends ConsumerState<ExploreMangasView> {
               return _buildLoading();
             },
           ),
-          if (exploreMangas.status == ExploreStatus.ongoing)
+          if (exploreMangas.status == ExploreStatus.ongoing &&
+              exploreMangas.mangas.isNotEmpty)
             const Positioned(
-              bottom: -40,
+              bottom: 40,
               left: 0,
               right: 0,
               child: Center(
-                child: Text(
-                  'Done!',
-                  style: TextStyle(color: Colors.green, fontSize: 20),
+                child: CircularProgressIndicator(
+                  strokeWidth: 5,
                 ),
               ),
             ),
@@ -154,6 +163,36 @@ class _ExploreMangasViewState extends ConsumerState<ExploreMangasView> {
     );
   }
 
+  Widget _buildSearchField() {
+    return TextField(
+      controller: _searchQueryController,
+      textInputAction: TextInputAction.search,
+      decoration: const InputDecoration(
+        hintText: 'Search manga...',
+        border: InputBorder.none,
+        hintStyle: TextStyle(color: Colors.black38),
+      ),
+      style: const TextStyle(color: Colors.black, fontSize: 16.0),
+      onTap: () {
+        if (!_isSearching) {
+          ModalRoute.of(context)
+              ?.addLocalHistoryEntry(LocalHistoryEntry(onRemove: () {
+            setState(() {
+              _isSearching = false;
+            });
+          }));
+          setState(() {
+            _isSearching = true;
+          });
+        }
+      },
+      onSubmitted: (query) {
+        ref.read(exploreProvider.notifier).clean();
+        ref.read(exploreProvider.notifier).getSearch(query);
+      },
+    );
+  }
+
   Widget _buildLoading() {
     return const Center(
       child: CircularProgressIndicator(),
@@ -163,6 +202,26 @@ class _ExploreMangasViewState extends ConsumerState<ExploreMangasView> {
   Widget _buildError() {
     return const Center(
       child: Text('Imposible cargar mangas'),
+    );
+  }
+}
+
+class SearchTextField extends StatelessWidget {
+  const SearchTextField({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      textInputAction: TextInputAction.search,
+      decoration: const InputDecoration(
+        hintText: 'Search manga...',
+        border: InputBorder.none,
+        hintStyle: TextStyle(color: Colors.black38),
+      ),
+      style: const TextStyle(color: Colors.black, fontSize: 16.0),
+      onSubmitted: (query) {},
     );
   }
 }

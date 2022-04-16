@@ -5,15 +5,11 @@ import 'package:meronpan/domain/models/manga.dart';
 import 'package:meronpan/domain/models/mangas_page.dart';
 
 abstract class LocalSourceRepository extends MangaSourceRepository {
-  int get versionId;
-
-  @override
-  String get id => 'local/$versionId';
-
+  
   /// Return a page with a list of manga
   ///
   /// [page] the page number to retrieve.
-  Future<MangasPage> fetchFavoritesMangas();
+  Future<MangasPage> getFavoritesMangas();
 
   Future saveManga(Manga manga);
 
@@ -24,8 +20,8 @@ abstract class LocalSourceRepository extends MangaSourceRepository {
   /// [page] the page number to retrieve.
   /// [query] the search query.
   /// [filters] the list of filters to apply.
-  Future<MangasPage> fetchSearchManga(
+  Future<MangasPage> getSearchManga(
       int page, String query, FilterList filterList);
 
-  Future<MangasPage> fetchMangaDetails(Manga manga);
+  Future<MangasPage> getMangaDetails(Manga manga);
 }

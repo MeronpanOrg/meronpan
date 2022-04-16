@@ -1,7 +1,11 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:meronpan/data/datasources.dart';
+import 'package:meronpan/data/tmo/remote/data_sources/filters/tmo_request.dart';
+import 'package:meronpan/data/tmo/remote/data_sources/tmo_filter_provider.dart';
 import 'package:meronpan/domain/models/mangas_page.dart';
-import 'package:meronpan/domain/use_cases/aget_latest.dart';
-import 'package:meronpan/domain/use_cases/aget_populars.dart';
+import 'package:meronpan/domain/use_cases/interfaces/aget_latest.dart';
+import 'package:meronpan/domain/use_cases/interfaces/aget_populars.dart';
+import 'package:meronpan/domain/use_cases/interfaces/aget_search_use_case.dart';
 import 'package:meronpan/domain/uses_cases.dart';
 import 'package:meronpan/presentation/providers/explore/state/explore_provider_state.dart';
 
@@ -10,19 +14,26 @@ final exploreProvider =
   ref.maintainState = true;
 
   return ExploreNotifier(
-    ref.watch(getPopularsUseCaseProvider),
-    ref.watch(getLatestUseCaseProvider),
-  );
+      ref.watch(getPopularsUseCaseProvider),
+      ref.watch(getLatestUseCaseProvider),
+      ref.watch(getSearchUseCaseProvider),
+      ref.read);
 });
 
 class ExploreNotifier extends StateNotifier<ExplorePaginaton> {
   final AGetPopularsUseCase getPopularsUseCase;
   final AGetLatestUseCase getLatestUseCase;
+  final AGetSearchUseCase getSearchUseCase;
+  final Reader read;
 
   int _currentPage = 1;
 
-  ExploreNotifier(this.getPopularsUseCase, this.getLatestUseCase)
-      : super(const ExplorePaginaton()) {
+  ExploreNotifier(
+    this.getPopularsUseCase,
+    this.getLatestUseCase,
+    this.getSearchUseCase,
+    this.read,
+  ) : super(const ExplorePaginaton()) {
     getPopulars();
   }
 
@@ -46,7 +57,7 @@ class ExploreNotifier extends StateNotifier<ExplorePaginaton> {
 
       state = state.copyWith(status: ExploreStatus.ongoing);
 
-      final mangasPage = await getPopularsUseCase.getMangas(_currentPage);
+      final mangasPage = await callback(_currentPage);
       _currentPage++;
 
       state = state.copyWith(
@@ -59,11 +70,37 @@ class ExploreNotifier extends StateNotifier<ExplorePaginaton> {
   }
 
   Future<void> getPopulars() async {
+    print('Get Populars Call');
     await _getMangas(getPopularsUseCase.getMangas);
   }
 
   Future<void> getLatest() async {
+    print('Get Latest Call');
     await _getMangas(getLatestUseCase.getMangas);
+  }
+
+  Future<void> getSearch([String query = '']) async {
+    print('Get Search Call');
+    if (state.hasLoadMoreDone || state.status == ExploreStatus.ongoing) {
+      return;
+    }
+
+    try {
+      state = state.copyWith(status: ExploreStatus.ongoing);
+
+      final request = read(tmoFilterProvider);
+
+      final mangasPage = await getSearchUseCase.getMangas(
+          _currentPage, query, request.getFilterList());
+      _currentPage++;
+
+      state = state.copyWith(
+          mangas: List.of(state.mangas)..addAll(mangasPage.mangas),
+          hasLoadMoreDone: !mangasPage.hasNextpage,
+          status: ExploreStatus.success);
+    } catch (_) {
+      state = state.copyWith(status: ExploreStatus.failure);
+    }
   }
 
   void refresh() {

@@ -49,6 +49,8 @@ dependencies:
   path: ^1.8.0
   photo_view: ^0.13.0
   dio_cache_interceptor: ^3.2.6
+  html: ^0.15.0
+  dio_cache_interceptor_hive_store: ^3.1.1
 
 dev_dependencies:
   flutter_test:

@@ -1,6 +1,6 @@
 import 'package:meronpan/domain/models/mangas_page.dart';
 import 'package:meronpan/domain/repositories/http_repository.dart';
-import 'package:meronpan/domain/use_cases/aget_latest.dart';
+import 'package:meronpan/domain/use_cases/interfaces/aget_latest.dart';
 
 class GetLatestUseCase extends AGetLatestUseCase {
   final HttpSourceRepository httpRepository;

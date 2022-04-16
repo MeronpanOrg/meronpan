@@ -1,4 +1,3 @@
-
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:meronpan/data/tmo/remote/data_sources/filters/tmo_filters.dart';
 import 'package:meronpan/data/tmo/remote/data_sources/filters/tmo_request.dart';
@@ -6,8 +5,7 @@ import 'package:meronpan/data/tmo/remote/data_sources/filters/tmo_request.dart';
 import 'package:meronpan/domain/models/filter.dart';
 
 final tmoFilterProvider =
-    StateNotifierProvider<TMOFilterNotifier, TMORequest>(
-        (ref) {
+    StateNotifierProvider<TMOFilterNotifier, TMORequest>((ref) {
   return TMOFilterNotifier();
 });
 
@@ -16,6 +14,10 @@ class TMOFilterNotifier extends StateNotifier<TMORequest> {
       : super(
           TMORequest.init(),
         );
+
+  void restore() {
+    state = TMORequest.init();
+  }
 
   void changeTypeSelectionState(int newIndex) {
     state = state.copyWith(typeSelection: TypeSelection(state: newIndex));

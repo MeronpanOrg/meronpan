@@ -5,7 +5,6 @@ import 'package:meronpan/domain/models/chapter.dart';
 import 'package:meronpan/domain/models/manga.dart';
 import 'package:meronpan/presentation/providers/manga/manga_page_provider.dart';
 import 'package:meronpan/presentation/providers/manga/page_state.dart';
-import 'package:meronpan/presentation/providers/selected/selected_manga_provider.dart';
 import 'package:meronpan/presentation/views/manga/shimmer_manga_view.dart';
 import 'package:meronpan/presentation/views/manga/widgets/header.dart';
 

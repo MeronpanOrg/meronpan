@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:meronpan/data/tmo/remote/data_sources/filters/tmo_request.dart';
+import 'package:meronpan/data/tmo/remote/data_sources/tmo_filter_provider.dart';
 import 'package:meronpan/presentation/providers/explore/explore_provider.dart';
 
 class BottomSheetTopBar extends ConsumerWidget {
@@ -58,7 +60,9 @@ class BottomSheetTopBar extends ConsumerWidget {
             children: [
               TextButton(
                 onPressed: () {
-                  ref.read(exploreProvider.notifier).refresh();
+                  ref.read(exploreProvider.notifier).clean();
+                  ref.read(tmoFilterProvider.notifier).restore();
+                  TMORequest.init();
                 },
                 child: const Text(
                   'Reiniciar',
@@ -69,8 +73,8 @@ class BottomSheetTopBar extends ConsumerWidget {
                 size: const Size(200, 40),
                 child: ElevatedButton(
                   onPressed: () {
-                    ref.read(exploreProvider.notifier).refresh();
-                    // ref.read(tmoMangasProvider.notifier).fetchMangasByFilter();
+                    ref.read(exploreProvider.notifier).clean();
+                    ref.read(exploreProvider.notifier).getSearch();
                   },
                   child: const Text(
                     'Aplicar',

@@ -1,7 +1,7 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:meronpan/domain/models/manga.dart';
 import 'package:meronpan/domain/models/manga_details.dart';
-import 'package:meronpan/domain/use_cases/aget_details_use_case.dart';
+import 'package:meronpan/domain/use_cases/interfaces/aget_details_use_case.dart';
 import 'package:meronpan/domain/uses_cases.dart';
 
 import 'package:meronpan/presentation/providers/manga/page_state.dart';

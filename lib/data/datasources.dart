@@ -5,5 +5,7 @@ import 'package:meronpan/data/tmo/remote/data_sources/tmo_source.dart';
 
 final tmoSourceProvider = Provider<TmoSource>((ref) {
   return TmoSource(
-      isSFWMode: ref.watch(preferencesProvider).get(PreferencesKeys.sfw));
+    ref.read,
+    isSFWMode: ref.watch(preferencesProvider).get(PreferencesKeys.sfw) ?? true,
+  );
 });

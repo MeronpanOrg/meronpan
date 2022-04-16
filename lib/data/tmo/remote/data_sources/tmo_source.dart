@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart' show parse;
+import 'package:meronpan/core/config/cache/request/dio_provider.dart';
 import 'package:meronpan/core/utils/status_enum.dart';
 import 'package:meronpan/data/tmo/remote/data_sources/filters/tmo_filters.dart';
 import 'package:meronpan/domain/models/chapter.dart';
@@ -10,10 +12,11 @@ import 'package:meronpan/domain/models/filter_list.dart';
 import 'package:meronpan/domain/models/filter.dart';
 
 class TmoSource {
-  final Dio _dio = Dio();
+  Reader read;
+  final Dio _dio;
   final bool isSFWMode;
 
-  TmoSource({this.isSFWMode = true});
+  TmoSource(this.read, {this.isSFWMode = true}) : _dio = read(dioProvider);
 
   Dio get client => _dio;
   String get baseUrl => 'https://lectortmo.com';
@@ -192,6 +195,7 @@ class TmoSource {
     MangasPage? mangasPage;
     try {
       final res = await searchMangaRequest(page, query, filterList);
+      print(res.realUri.toString());
       mangasPage = await searchMangaParse(res);
     } catch (e) {
       print(e);
