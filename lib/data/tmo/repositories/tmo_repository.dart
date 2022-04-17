@@ -44,7 +44,7 @@ class TmoRepository extends ITmoRepository {
     try {
       final res = await source.mangaDetailsRequest(manga);
       final mangaParsed = await source.mangaDetailsParse(res);
-      final chapters = await source.chapterListParse(res, true);
+      final chapters = await source.chapterListParse(res);
 
       mangaDetails = MangaDetails(manga: mangaParsed, chapters: chapters);
     } on DioError catch (_) {

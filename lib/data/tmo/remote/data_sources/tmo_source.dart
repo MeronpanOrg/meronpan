@@ -3,6 +3,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart' show parse;
 import 'package:meronpan/core/config/cache/request/dio_provider.dart';
+import 'package:meronpan/core/config/preferences/preferences_keys.dart';
+import 'package:meronpan/core/config/preferences/preferences_provider.dart';
 import 'package:meronpan/core/utils/status_enum.dart';
 import 'package:meronpan/data/tmo/remote/data_sources/filters/tmo_filters.dart';
 import 'package:meronpan/domain/models/chapter.dart';
@@ -15,8 +17,13 @@ class TmoSource {
   Reader read;
   final Dio _dio;
   final bool isSFWMode;
+  final bool showAllScans;
 
-  TmoSource(this.read, {this.isSFWMode = true}) : _dio = read(dioProvider);
+  TmoSource(this.read)
+      : _dio = read(dioProvider),
+        isSFWMode = read(preferencesProvider).get(PreferencesKeys.sfw),
+        showAllScans =
+            read(preferencesProvider).get(PreferencesKeys.showAllScans);
 
   Dio get client => _dio;
   String get baseUrl => 'https://lectortmo.com';
@@ -303,8 +310,7 @@ class TmoSource {
         scanlator: scanlator);
   }
 
-  Future<List<Chapter>> chapterListParse(
-      Response response, bool showAllScans) async {
+  Future<List<Chapter>> chapterListParse(Response response) async {
     final document = parse(response.data);
 
     // One-shot
@@ -348,7 +354,7 @@ class TmoSource {
     return chapters;
   }
 
-  Future<MangasPage?> fetchMangaDetails(Manga manga, bool showAllScans) async {
+  Future<MangasPage?> fetchMangaDetails(Manga manga) async {
     Manga? details;
     try {
       final res = await mangaDetailsRequest(manga);

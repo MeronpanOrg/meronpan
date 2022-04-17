@@ -9,7 +9,6 @@ abstract class ITmoRepository implements HttpSourceRepository {
   @override
   String get baseUrl => 'https://lectortmo.com';
 
-  @override
   String get icon => 'https://nakamasweb.com/favicons/tumangaonline.ico';
 
   @override

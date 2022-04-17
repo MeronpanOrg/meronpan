@@ -7,17 +7,26 @@ import 'package:meronpan/presentation/views/views.dart';
 class RootView extends ConsumerWidget {
   const RootView({Key? key}) : super(key: key);
 
-  final List<Widget> pages = const [
-    HomeView(),
-    ExploreMangasView(),
-    SettingsView()
-  ];
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    int page = ref.watch(uiProvider);
+
     return Scaffold(
-      body: pages.elementAt(ref.watch<int>(uiProvider)),
+      body: _buildPage(page),
       bottomNavigationBar: const MeronpanBottomNavBar(),
     );
+  }
+
+  Widget _buildPage(int page) {
+    switch (page) {
+      case 0:
+        return const HomeView();
+      case 1:
+        return const ExploreMangasView();
+      case 2:
+        return const SettingsView();
+      default:
+        return const HomeView();
+    }
   }
 }

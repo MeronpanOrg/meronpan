@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:meronpan/presentation/providers/selected/selected_manga_provider.dart';
 import 'package:meronpan/presentation/views/manga/widgets/header.dart';
+import 'package:shimmer/shimmer.dart';
 
 const shimmerGradient = LinearGradient(
   colors: [
@@ -77,19 +78,25 @@ class ShimmerMangaView extends ConsumerWidget {
           const SizedBox(height: 16),
           _buildLine(width: double.infinity, height: 16),
           const SizedBox(height: 16),
+          _buildLine(width: double.infinity, height: 16),
+          const SizedBox(height: 16),
           _buildLine(width: 250, height: 16),
         ],
       ),
     );
   }
 
-  Container _buildLine({required double width, required double height}) {
-    return Container(
-      width: width,
-      height: height,
-      decoration: BoxDecoration(
-        color: Colors.grey,
-        borderRadius: BorderRadius.circular(16),
+  Widget _buildLine({required double width, required double height}) {
+    return Shimmer.fromColors(
+      baseColor: const Color.fromARGB(255, 218, 218, 218),
+      highlightColor: const Color(0xFFF4F4F4),
+      child: Container(
+        width: width,
+        height: height,
+        decoration: BoxDecoration(
+          color: Colors.grey,
+          borderRadius: BorderRadius.circular(16),
+        ),
       ),
     );
   }

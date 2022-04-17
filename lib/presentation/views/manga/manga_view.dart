@@ -21,6 +21,10 @@ class MangaView extends ConsumerWidget {
       return const ShimmerMangaView();
     }
 
+    if (page.status == PageStatus.ongoing) {
+      return const ShimmerMangaView();
+    }
+
     if (page.status == PageStatus.failure) {
       return _buildMangaError();
     }
@@ -30,43 +34,7 @@ class MangaView extends ConsumerWidget {
 
     return _MangaBody(
       mangaDetails: manga,
-      chaptersSliver: SliverFixedExtentList(
-        itemExtent: 80,
-        delegate: _buildChapters(chapters),
-      ),
-    );
-  }
-
-  SliverChildBuilderDelegate _buildChapters(List<Chapter> chapters) {
-    if (chapters.isEmpty) {
-      return SliverChildBuilderDelegate(
-        (context, index) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        },
-        childCount: 1,
-      );
-    }
-
-    return SliverChildBuilderDelegate(
-      (context, index) {
-        return ListTile(
-          onTap: () {
-            showAboutDialog(
-                context: context, children: [Text(chapters[index].url)]);
-          },
-          title: Text(
-            chapters[index].name,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-          ),
-          subtitle: Text(chapters[index].scanlator),
-          shape: const ContinuousRectangleBorder(
-              side: BorderSide(color: Color(0xffe0e0e0))),
-        );
-      },
-      childCount: chapters.length,
+      chapters: chapters,
     );
   }
 
@@ -77,9 +45,10 @@ class MangaView extends ConsumerWidget {
 
 class _MangaBody extends HookConsumerWidget {
   final Manga mangaDetails;
-  final Widget? chaptersSliver;
+  final List<Chapter> chapters;
 
-  const _MangaBody({Key? key, required this.mangaDetails, this.chaptersSliver})
+  const _MangaBody(
+      {Key? key, required this.mangaDetails, required this.chapters})
       : super(key: key);
 
   @override
@@ -134,19 +103,69 @@ class _MangaBody extends HookConsumerWidget {
                 Container(
                   margin:
                       const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-                  child: const Text(
-                    'Capitulos',
-                    style: TextStyle(
-                      fontSize: 20,
-                    ),
+                  child: Row(
+                    children: [
+                      Text(
+                        chapters.length.toString(),
+                        style: const TextStyle(
+                          fontSize: 20,
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 16,
+                      ),
+                      const Text(
+                        'Capitulos',
+                        style: TextStyle(
+                          fontSize: 20,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
             ),
           ),
-          if (chaptersSliver != null) chaptersSliver!
+          if (chapters.isNotEmpty)
+            SliverFixedExtentList(
+              itemExtent: 80,
+              delegate: _buildChapters(chapters),
+            ),
         ],
       ),
+    );
+  }
+
+  SliverChildBuilderDelegate _buildChapters(List<Chapter> chapters) {
+    if (chapters.isEmpty) {
+      return SliverChildBuilderDelegate(
+        (context, index) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        },
+        childCount: 1,
+      );
+    }
+
+    return SliverChildBuilderDelegate(
+      (context, index) {
+        return ListTile(
+          onTap: () {
+            showAboutDialog(
+                context: context, children: [Text(chapters[index].url)]);
+          },
+          title: Text(
+            chapters[index].name,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+          subtitle: Text(chapters[index].scanlator),
+          shape: const ContinuousRectangleBorder(
+              side: BorderSide(color: Color(0xffe0e0e0))),
+        );
+      },
+      childCount: chapters.length,
     );
   }
 

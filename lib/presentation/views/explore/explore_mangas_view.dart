@@ -61,38 +61,45 @@ class _ExploreMangasViewState extends ConsumerState<ExploreMangasView> {
               if (exploreMangas.status == ExploreStatus.failure) {
                 return _buildError();
               }
-              if (exploreMangas.mangas.isNotEmpty) {
-                final mangas = exploreMangas.mangas;
 
-                return CustomScrollView(
-                  controller: _scrollController,
-                  slivers: [
-                    SliverAppBar(
-                      elevation: 10,
-                      leading: !_isSearching ? const Icon(Icons.search) : null,
-                      floating: true,
-                      backgroundColor: Colors.white,
-                      shape: const StadiumBorder(),
-                      title: _buildSearchField(),
-                      actions: !_isSearching
-                          ? [
-                              IconButton(
-                                onPressed: () {},
-                                icon: const Icon(Icons.view_list_sharp),
-                              ),
-                              IconButton(
-                                onPressed: () {
-                                  ref.read(exploreProvider.notifier).refresh();
-                                },
-                                icon: const Icon(Icons.refresh),
-                              ),
-                              IconButton(
-                                onPressed: () {},
-                                icon: const Icon(Icons.more_vert),
-                              ),
-                            ]
-                          : [],
-                    ),
+              final mangas = exploreMangas.mangas;
+
+              return CustomScrollView(
+                controller: _scrollController,
+                slivers: [
+                  const SliverToBoxAdapter(
+                    child: SizedBox(height: 10),
+                  ),
+                  SliverAppBar(
+                    leading: !_isSearching ? const Icon(Icons.search) : null,
+                    floating: true,
+                    backgroundColor: Colors.white,
+                    shape: const StadiumBorder(),
+                    title: _buildSearchField(),
+                    actions: !_isSearching
+                        ? [
+                            IconButton(
+                              onPressed: () {},
+                              icon: const Icon(Icons.view_list_sharp),
+                            ),
+                            IconButton(
+                              onPressed: () {
+                                ref.read(exploreProvider.notifier).refresh();
+                              },
+                              icon: const Icon(Icons.refresh),
+                            ),
+                            IconButton(
+                              onPressed: () {},
+                              icon: const Icon(Icons.more_vert),
+                            ),
+                          ]
+                        : [],
+                  ),
+                  const SliverToBoxAdapter(
+                    child: SizedBox(height: 10),
+                  ),
+                  if (mangas.isEmpty) _buildLoadingSliver(),
+                  if (mangas.isNotEmpty)
                     SliverGrid(
                       delegate: SliverChildBuilderDelegate(
                         (context, index) {
@@ -128,10 +135,8 @@ class _ExploreMangasViewState extends ConsumerState<ExploreMangasView> {
                         mainAxisExtent: 220,
                       ),
                     )
-                  ],
-                );
-              }
-              return _buildLoading();
+                ],
+              );
             },
           ),
           if (exploreMangas.status == ExploreStatus.ongoing &&
@@ -159,6 +164,16 @@ class _ExploreMangasViewState extends ConsumerState<ExploreMangasView> {
             },
           );
         },
+      ),
+    );
+  }
+
+  SliverList _buildLoadingSliver() {
+    return SliverList(
+      delegate: SliverChildListDelegate.fixed(
+        [
+          _buildLoading(),
+        ],
       ),
     );
   }

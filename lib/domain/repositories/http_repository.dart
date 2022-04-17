@@ -7,7 +7,7 @@ import 'package:meronpan/domain/models/mangas_page.dart';
 abstract class HttpSourceRepository extends MangaSourceRepository {
   String get baseUrl;
   int get versionId;
-
+  String get lang;
 
   @override
   String get id => '$baseUrl/$lang/$versionId';

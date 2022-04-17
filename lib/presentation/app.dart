@@ -8,7 +8,6 @@ class MeronPanApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      
       debugShowCheckedModeBanner: false,
       title: 'Meron Pan',
       initialRoute: '/',
@@ -24,7 +23,7 @@ class MeronPanApp extends StatelessWidget {
           elevation: 0,
           foregroundColor: Colors.black,
         ),
-        scaffoldBackgroundColor: const Color.fromARGB(255, 240, 240, 240),
+        scaffoldBackgroundColor: Colors.white,
         navigationBarTheme: NavigationBarThemeData(
           backgroundColor: Colors.white,
           indicatorColor: Colors.lightBlueAccent,
