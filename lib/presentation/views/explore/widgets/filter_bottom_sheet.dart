@@ -117,7 +117,8 @@ class FilterDraggableScrollableSheet extends ConsumerWidget {
                         .read(tmoFilterProvider.notifier)
                         .changeGenreListState(index, check);
                   },
-                )
+                ),
+               const  SizedBox(height: 130)
               ],
             ),
             const Positioned(

@@ -34,7 +34,7 @@ class BottomSheetTopBar extends ConsumerWidget {
                 onPressed: () {},
                 child: const Text(
                   'Populares',
-                  style: TextStyle(color: Colors.black, fontSize: 16),
+                  style: TextStyle(fontSize: 16),
                 ),
               ),
               const SizedBox(
@@ -47,7 +47,7 @@ class BottomSheetTopBar extends ConsumerWidget {
                 },
                 child: const Text(
                   'Actualizados',
-                  style: TextStyle(color: Colors.black, fontSize: 16),
+                  style: TextStyle(fontSize: 16),
                 ),
               ),
             ],
@@ -60,9 +60,7 @@ class BottomSheetTopBar extends ConsumerWidget {
             children: [
               TextButton(
                 onPressed: () {
-                  ref.read(exploreProvider.notifier).clean();
                   ref.read(tmoFilterProvider.notifier).restore();
-                  TMORequest.init();
                 },
                 child: const Text(
                   'Reiniciar',

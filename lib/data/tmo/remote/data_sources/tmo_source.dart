@@ -21,9 +21,9 @@ class TmoSource {
 
   TmoSource(this.read)
       : _dio = read(dioProvider),
-        isSFWMode = read(preferencesProvider).get(PreferencesKeys.sfw),
+        isSFWMode = read(preferencesProvider).get(PreferencesKeys.sfw) ?? true,
         showAllScans =
-            read(preferencesProvider).get(PreferencesKeys.showAllScans);
+            read(preferencesProvider).get(PreferencesKeys.showAllScans) ?? true;
 
   Dio get client => _dio;
   String get baseUrl => 'https://lectortmo.com';
@@ -264,14 +264,19 @@ class TmoSource {
     final thumbnailUrl =
         document.querySelector('.book-thumbnail')?.attributes['src'] ?? '';
 
+    String genres =
+        document.querySelectorAll('a.py-2').map((g) => g.text).join(', ');
+
     return Manga(
-        title: title,
-        url: response.requestOptions.path,
-        description: description,
-        author: author,
-        artist: artist,
-        status: status,
-        thumbnailUrl: thumbnailUrl);
+      title: title,
+      url: response.requestOptions.path,
+      description: description,
+      author: author,
+      artist: artist,
+      genre: genres,
+      status: status,
+      thumbnailUrl: thumbnailUrl,
+    );
   }
 
   Chapter oneShotChapterFromElement(Element element) {

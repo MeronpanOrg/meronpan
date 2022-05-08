@@ -57,6 +57,8 @@ class _MangaBody extends HookConsumerWidget {
 
     bool isFavorited = false;
 
+    List<String> genres = mangaDetails.genre.split(', ');
+
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -99,6 +101,26 @@ class _MangaBody extends HookConsumerWidget {
                     if (mangaDetails.description.length > 200)
                       _buildExpandDescriptionButton(isDescriptionExpanded),
                   ],
+                ),
+                SizedBox(
+                  height: 48,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: genres.length,
+                    itemBuilder: (context, index) {
+                      return Container(
+                        margin: const EdgeInsets.symmetric(
+                          horizontal: 4.0,
+                        ),
+                        child: ActionChip(
+                          label: Text(genres[index]),
+                          onPressed: () {
+                            // TODO show all mangas of X genre
+                          },
+                        ),
+                      );
+                    },
+                  ),
                 ),
                 Container(
                   margin:

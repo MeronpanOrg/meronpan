@@ -81,6 +81,22 @@ class ShimmerMangaView extends ConsumerWidget {
           _buildLine(width: double.infinity, height: 16),
           const SizedBox(height: 16),
           _buildLine(width: 250, height: 16),
+          const SizedBox(height: 48),
+          Row(
+            children: [
+              _buildLine(width: 60, height: 16),
+              const SizedBox(width: 4),
+              _buildLine(width: 60, height: 16),
+            ],
+          ),
+          const SizedBox(height: 48),
+          _buildLine(width: double.infinity, height: 16),
+          const SizedBox(height: 32),
+          _buildLine(width: double.infinity, height: 16),
+          const SizedBox(height: 32),
+          _buildLine(width: double.infinity, height: 16),
+          const SizedBox(height: 32),
+          _buildLine(width: double.infinity, height: 16),
         ],
       ),
     );
